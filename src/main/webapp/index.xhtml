@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Login</title>
+    <h:outputStylesheet library="css" name="styles.css"/>
+    <style>
+        #login {
+            margin: 100px auto;
+            padding: 30px 50px 40px;
+            width: fit-content;
+            border: 4px double #2196f3;
+            text-align: center;
+        }
+
+        h1 {
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 5px 0;
+        }
+
+        .login-label {
+            color: #495057;
+            font-weight: normal;
+            font-size: 1em !important;
+        }
+
+        .ui-inputfield {
+            display: block;
+            margin: 5px 0 15px;
+            text-align: center;
+        }
+
+        .ui-button {
+            display: block;
+            width: 100%;
+            margin: 30px auto 0 !important;
+        }
+    </style>
+</h:head>
+<h:body>
+    <p:growl id="messages" showDetail="true" skipDetailIfEqualsSummary="true"/>
+    <h:form>
+        <div id="login">
+            <h1><p:outputLabel styleClass="login-label" value="Login"/></h1>
+            <p:inputText id="username" placeholder="User Name" value="#{login.username}"/>
+            <p:password id="password" placeholder="Password" value="#{login.password}"/>
+            <p:commandButton action="#{login.login()}" value="Submit" update="messages @form"/>
+        </div>
+    </h:form>
+</h:body>
+</html>

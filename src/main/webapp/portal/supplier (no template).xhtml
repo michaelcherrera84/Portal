@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Supplier</title>
+    <h:outputStylesheet library="css" name="styles.css"/>
+</h:head>
+
+<h:body>
+    <p:growl id="messages" life="4000" showDetail="true" skipDetailIfEqualsSummary="true"/>
+    <h:form>
+        <p:toolbar>
+            <p:toolbarGroup align="right">
+                <p:menuButton icon="pi pi-user" buttonStyleClass="rounded-button ui-button-raised ui-button-secondary">
+                    <p:menuitem value="Logout" action="#{login.logout()}" icon="pi pi-sign-out"/>
+                </p:menuButton>
+            </p:toolbarGroup>
+        </p:toolbar>
+    </h:form>
+    <h:form styleClass="wrapper">
+        <p:toolbar styleClass="border">
+            <p:toolbarGroup>
+                <p:commandButton ajax="false" value="Supplier" action="/portal/supplier?faces-redirect=true"
+                                 styleClass="ui-button-raised ui-button-info mr-1"/>
+                <p:commandButton ajax="false" value="Part"
+                                 styleClass="ui-button-raised ui-button-success mr-1"/>
+                <p:commandButton ajax="false" value="Project"
+                                 styleClass="ui-button-raised ui-button-help mr-1"/>
+                <p:commandButton ajax="false" value="SPJ"
+                                 styleClass="ui-button-raised ui-button-warning mr-2"/>
+
+                <i class="pi pi-ellipsis-v mr-2"/>
+
+                <p:commandButton value="Add Supplier" icon="pi pi-plus-circle"
+                                 styleClass="ui-button-outlined ui-button-raised"/>
+            </p:toolbarGroup>
+            <p:toolbarGroup align="right">
+                <p:inputNumber id="search_box" placeholder="Find Supplier" title="Search by ID"
+                               value="#{supplierBean.searchSupplier.id}"
+                               modifyValueOnWheel="false"/>
+                <p:commandButton icon="pi pi-search" action="#{supplierBean.read()}"
+                                 styleClass="ui-button-raised"
+                                 update="search_box messages" style="display: inline"/>
+                <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
+                    <p:panelGrid columns="4" columnClasses="col1,col2,col3,col4">
+                        <p:column>
+                            <p:outputLabel value="Name" styleClass="label"/>
+                            <p:outputLabel value="#{supplierBean.searchSupplier.name}" styleClass="content"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Date" styleClass="label"/>
+                            <p:outputLabel value="#{supplierBean.searchSupplier.date}" styleClass="content"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Count" styleClass="label"/>
+                            <p:outputLabel value="#{supplierBean.searchSupplier.count}" styleClass="content"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Location" styleClass="label"/>
+                            <p:outputLabel value="#{supplierBean.searchSupplier.location}" styleClass="content"/>
+                        </p:column>
+                    </p:panelGrid>
+                </p:dialog>
+            </p:toolbarGroup>
+        </p:toolbar>
+        <div id="table">
+            <p:dataTable id="supplier_table" editable="true" value="#{supplierBean.suppliers}" var="supplier"
+                         showGridlines="true" rowIndexVar="i" reflow="true">
+                <p:column headerText="ID" sortBy="#{supplier.id}">
+                    <p:cellEditor>
+                        <f:facet name="output"><p:outputLabel value="#{supplier.id}"/></f:facet>
+                        <f:facet name="input">
+                            <p:inputNumber value="#{supplier.id}" validator="#{supplierBean.validateID}"
+                                           modifyValueOnWheel="false" disabled="true"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column styleClass="nameCol" headerText="Name" sortBy="#{supplier.name}">
+                    <p:cellEditor>
+                        <f:facet name="output"><p:outputLabel value="#{supplier.name}"/></f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{supplier.name}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column styleClass="dateCol" headerText="Date" sortBy="#{supplier.date}">
+                    <p:cellEditor>
+                        <f:facet name="output"><p:outputLabel value="#{supplier.convertDate()}"/></f:facet>
+                        <f:facet name="input"><p:datePicker value="#{supplier.date}"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Count" sortBy="#{supplier.count}">
+                    <p:cellEditor>
+                        <f:facet name="output"><p:outputLabel value="#{supplier.count}"/></f:facet>
+                        <f:facet name="input">
+                            <p:inputNumber value="#{supplier.count}" modifyValueOnWheel="false"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Location" sortBy="#{supplier.location}">
+                    <p:cellEditor>
+                        <f:facet name="output"><p:outputLabel value="#{supplier.location}"/></f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{supplier.location}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column styleClass="updateCol"><p:rowEditor styleClass="row-editor"/>
+                    <p:commandButton process="@this" action="#{supplierBean.showDeleteDialog(supplier)}"
+                                     styleClass="ui-button-raised ui-button-danger delete-button" icon="pi pi-trash"/>
+                    <p:dialog id="confirm" widgetVar="delete" header="Delete Supplier" modal="true" closeOnEscape="true"
+                              styleClass="left">
+                        <p:outputLabel value="#{supplierBean.deleteConfirm()}" escape="false"/>
+                        <div class="confirm-buttons">
+                            <p:commandButton value="Cancel" styleClass="ui-button-flat ui-button-plain"
+                                             action="#{supplierBean.deleteCancel()}" onclick="PF('delete').hide()"/>
+                            <p:spacer width="5px"/>
+                            <p:commandButton value="Confirm" styleClass="ui-button-raised ui-button-danger"
+                                             action="#{supplierBean.delete()}" onclick="PF('delete').hide()"
+                                             update="supplier_table messages"/>
+                        </div>
+                    </p:dialog>
+                </p:column>
+                <p:ajax event="rowEdit" listener="#{supplierBean.update(i)}" update="messages supplier_table"/>
+                <p:ajax event="rowEditCancel" listener="#{supplierBean.updateCancel}" update="messages supplier_table"/>
+            </p:dataTable>
+        </div>
+    </h:form>
+</h:body>
+
+</html>

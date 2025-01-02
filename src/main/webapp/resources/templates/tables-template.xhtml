@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title><ui:insert name="title"/></title>
+    <h:outputStylesheet library="css" name="styles.css"/>
+</h:head>
+
+<h:body>
+    <p:growl id="messages" life="4000" showDetail="true" skipDetailIfEqualsSummary="true"/>
+    <h:form>
+        <p:toolbar>
+            <p:toolbarGroup align="right">
+                <p:menuButton icon="pi pi-user" buttonStyleClass="rounded-button ui-button-raised ui-button-secondary">
+                    <p:menuitem value="Logout" action="#{login.logout()}" icon="pi pi-sign-out"/>
+                </p:menuButton>
+            </p:toolbarGroup>
+        </p:toolbar>
+    </h:form>
+    <h:form styleClass="wrapper">
+        <p:toolbar styleClass="border">
+            <p:toolbarGroup>
+                <p:commandButton ajax="false" value="Supplier" action="/portal/supplier?faces-redirect=true"
+                                 styleClass="ui-button-raised ui-button-info mr-1"/>
+                <p:commandButton ajax="false" value="Part"
+                                 styleClass="ui-button-raised ui-button-success mr-1"/>
+                <p:commandButton ajax="false" value="Project"
+                                 styleClass="ui-button-raised ui-button-help mr-1"/>
+                <p:commandButton ajax="false" value="SPJ"
+                                 styleClass="ui-button-raised ui-button-warning mr-2"/>
+
+                <i class="pi pi-ellipsis-v mr-2"/>
+
+                <ui:insert name="add_button">Button to add record to table</ui:insert>
+            </p:toolbarGroup>
+
+            <ui:insert name="search">Search Tool to find a Record</ui:insert>
+        </p:toolbar>
+        <div id="table">
+            <ui:insert name="table">Main Datatable</ui:insert>
+        </div>
+    </h:form>
+</h:body>
+
+</html>
