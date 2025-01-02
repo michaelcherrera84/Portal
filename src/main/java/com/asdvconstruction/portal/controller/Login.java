@@ -66,7 +66,8 @@ public class Login implements Serializable {
      */
     public String login() {
 
-        user = new User(username, password, "admin");
+//        user = new User(username, password, "admin");
+        user = new User("root", "root", "admin");
 
         try (Connection connection = Database.connection(user)) {
             ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).setAttribute(

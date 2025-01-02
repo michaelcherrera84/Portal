@@ -42,7 +42,7 @@
             </p:toolbarGroup>
             <p:toolbarGroup align="right">
                 <p:inputNumber id="search_box" placeholder="Find Supplier" title="Search by ID"
-                               value="#{supplierBean.searchSupplier.id}"
+                               value="#{supplierBean.readSupplier.id}"
                                modifyValueOnWheel="false"/>
                 <p:commandButton icon="pi pi-search" action="#{supplierBean.read()}"
                                  styleClass="ui-button-raised"
@@ -51,19 +51,19 @@
                     <p:panelGrid columns="4" columnClasses="col1,col2,col3,col4">
                         <p:column>
                             <p:outputLabel value="Name" styleClass="label"/>
-                            <p:outputLabel value="#{supplierBean.searchSupplier.name}" styleClass="content"/>
+                            <p:outputLabel value="#{supplierBean.readSupplier.name}" styleClass="r-content"/>
                         </p:column>
                         <p:column>
                             <p:outputLabel value="Date" styleClass="label"/>
-                            <p:outputLabel value="#{supplierBean.searchSupplier.date}" styleClass="content"/>
+                            <p:outputLabel value="#{supplierBean.readSupplier.date}" styleClass="r-content"/>
                         </p:column>
                         <p:column>
                             <p:outputLabel value="Count" styleClass="label"/>
-                            <p:outputLabel value="#{supplierBean.searchSupplier.count}" styleClass="content"/>
+                            <p:outputLabel value="#{supplierBean.readSupplier.count}" styleClass="r-content"/>
                         </p:column>
                         <p:column>
                             <p:outputLabel value="Location" styleClass="label"/>
-                            <p:outputLabel value="#{supplierBean.searchSupplier.location}" styleClass="content"/>
+                            <p:outputLabel value="#{supplierBean.readSupplier.location}" styleClass="r-content"/>
                         </p:column>
                     </p:panelGrid>
                 </p:dialog>

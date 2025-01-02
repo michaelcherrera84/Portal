@@ -21,20 +21,6 @@ public class SupplierDAO implements DAO<Supplier> {
      User user = (User) session.getAttribute("user");
 //    User user = new User("root", "root", "admin");
 
-    /**
-     * Set parameters of a {@linkplain PreparedStatement} using specified {@linkplain Supplier}.
-     *
-     * @param supplier          a {@linkplain Supplier}
-     * @param preparedStatement a {@linkplain PreparedStatement}
-     */
-    private void setParams(Supplier supplier, PreparedStatement preparedStatement) throws SQLException {
-
-        preparedStatement.setInt(1, supplier.getId());
-        preparedStatement.setString(2, supplier.getName());
-        preparedStatement.setDate(3, Date.valueOf(supplier.getDate()));
-        preparedStatement.setInt(4, supplier.getCount());
-        preparedStatement.setString(5, supplier.getLocation());
-    }
 
     /**
      * Set the fields of a {@linkplain Supplier} using specified {@linkplain ResultSet}.
@@ -62,12 +48,15 @@ public class SupplierDAO implements DAO<Supplier> {
     @Override
     public int create(Supplier supplier) throws SQLException {
 
-        String sql = "INSERT INTO Supplier (id, name, date, count, location) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Supplier (id, name, date, count, location) VALUES (DEFAULT, ?, ?, ?, ?)";
 
         try (Connection connection = Database.connection(user);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            setParams(supplier, preparedStatement);
+            preparedStatement.setString(1, supplier.getName());
+            preparedStatement.setDate(2, Date.valueOf(supplier.getDate()));
+            preparedStatement.setInt(3, supplier.getCount() == null ? 0 : supplier.getCount());
+            preparedStatement.setString(4, supplier.getLocation());
             return preparedStatement.executeUpdate();
         }
     }
@@ -143,7 +132,11 @@ public class SupplierDAO implements DAO<Supplier> {
         try (Connection connection = Database.connection(user);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            setParams(supplier, preparedStatement);
+            preparedStatement.setInt(1, supplier.getId());
+            preparedStatement.setString(2, supplier.getName());
+            preparedStatement.setDate(3, Date.valueOf(supplier.getDate()));
+            preparedStatement.setInt(4, supplier.getCount());
+            preparedStatement.setString(5, supplier.getLocation());
             preparedStatement.setInt(6, (Integer) id);
             return preparedStatement.executeUpdate();
         }

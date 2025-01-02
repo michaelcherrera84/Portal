@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * @author Michael C. Herrera
  */
-@WebFilter("/faces/resources/*")
+@WebFilter("/resources/*")
 public class TemplateFilter implements Filter {
 
     @Override

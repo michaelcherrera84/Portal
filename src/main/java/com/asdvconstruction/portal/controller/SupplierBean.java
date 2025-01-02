@@ -41,6 +41,16 @@ public class SupplierBean implements Serializable {
     private final SupplierDAO SUPPLIER_DAO;
 
     /**
+     * Supplier to add.
+     */
+    private Supplier createSupplier;
+
+    /**
+     * Supplier used for supplier search.
+     */
+    private Supplier readSupplier;
+
+    /**
      * List containing all suppliers in the supplier table.
      */
     private List<Supplier> suppliers;
@@ -48,12 +58,7 @@ public class SupplierBean implements Serializable {
     /**
      * Supplier that is being updated or deleted.
      */
-    private Supplier tempSupplier;
-
-    /**
-     * Supplier used for supplier search.
-     */
-    private Supplier searchSupplier;
+    private Supplier updateSupplier;
 
     /**
      * Construct the SupplierBean.
@@ -61,14 +66,51 @@ public class SupplierBean implements Serializable {
     public SupplierBean() {
 
         SUPPLIER_DAO = new SupplierDAO();
-        tempSupplier = new Supplier();
-        searchSupplier = new Supplier();
+        createSupplier = new Supplier();
+        readSupplier = new Supplier();
+
         try {
             suppliers = SUPPLIER_DAO.readAll();
         } catch (SQLException e) {
             Utilities.addMessage(FacesMessage.SEVERITY_FATAL, "Error retrieving data.", null);
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
+        updateSupplier = new Supplier();
+    }
+
+    /**
+     * Get the value of createSupplier.
+     *
+     * @return the value of createSupplier
+     */
+    public Supplier getCreateSupplier() {return createSupplier;}
+
+    /**
+     * Set the value of createSupplier.
+     *
+     * @param createSupplier new value of createSupplier
+     */
+    public void setCreateSupplier(Supplier createSupplier) {
+
+        this.createSupplier = createSupplier;
+    }
+
+    /**
+     * Get the value of searchSupplier.
+     *
+     * @return the value of searchSupplier
+     */
+    public Supplier getReadSupplier() {return readSupplier;}
+
+    /**
+     * Set the value of searchSupplier.
+     *
+     * @param readSupplier new value of searchSupplier
+     */
+    public void setReadSupplier(Supplier readSupplier) {
+
+        this.readSupplier = readSupplier;
     }
 
     /**
@@ -79,37 +121,6 @@ public class SupplierBean implements Serializable {
     public List<Supplier> getSuppliers() {return suppliers;}
 
     /**
-     * Get the value of supplierNumber.
-     *
-     * @return the value of supplierNumber
-     */
-    public Supplier getTempSupplier() {return tempSupplier;}
-
-    /**
-     * Get the value of searchSupplier.
-     *
-     * @return the value of searchSupplier
-     */
-    public Supplier getSearchSupplier() {return searchSupplier;}
-
-    /**
-     * Set the value of searchSupplier.
-     *
-     * @param searchSupplier new value of searchSupplier
-     */
-    public void setSearchSupplier(Supplier searchSupplier) {
-
-        this.searchSupplier = searchSupplier;
-    }
-
-    /**
-     * Set the value of tempSupplier.
-     *
-     * @param tempSupplier new value of tempSupplier
-     */
-    public void setTempSupplier(Supplier tempSupplier) {this.tempSupplier = tempSupplier;}
-
-    /**
      * Validate a value provided for a supplier number and store the previous value.
      *
      * @param facesContext per-request state information related to the processing of the Jakarta Faces request, and the
@@ -117,15 +128,38 @@ public class SupplierBean implements Serializable {
      * @param uiComponent  user interface component that will contain the value to be validated
      * @param o            value to be validated
      */
+    @SuppressWarnings("unused")
     public void validateID(FacesContext facesContext, UIComponent uiComponent, Object o) {
 
         for (Supplier supplier : suppliers)
             if (((InputNumber) uiComponent).getValue() == supplier.getId())
-                tempSupplier = new Supplier(supplier);
+                updateSupplier = new Supplier(supplier);
     }
 
+    /**
+     * Insert a new supplier.
+     */
     public void create() {
 
+        if (createSupplier.getName() == null || createSupplier.getDate() == null ||
+                createSupplier.getLocation() == null) {
+            Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Supplier not added.",
+                    "Name, date, and location cannot be empty.");
+            return;
+        }
+
+            try {
+                SUPPLIER_DAO.create(createSupplier);
+                suppliers = SUPPLIER_DAO.readAll();
+            } catch (SQLException e) {
+                Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Supplier not added.",
+                        "An error occurred while attempted to insert the supplier.");
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            }
+
+        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
+        PrimeFaces.current().executeScript("PF('create').hide()");
+        createSupplier = new Supplier();
     }
 
     /**
@@ -134,13 +168,13 @@ public class SupplierBean implements Serializable {
     public void read() {
 
         for (Supplier supplier : suppliers)
-            if (Objects.equals(searchSupplier.getId(), supplier.getId())) {
-                searchSupplier = new Supplier(supplier);
+            if (Objects.equals(readSupplier.getId(), supplier.getId())) {
+                readSupplier = new Supplier(supplier);
                 showReadDialog();
                 return;
             }
 
-        searchSupplier.setId(null);
+        readSupplier.setId(null);
         Utilities.addMessage(FacesMessage.SEVERITY_INFO, "Supplier not found.",
                 "No supplier exists with that ID.");
     }
@@ -152,7 +186,7 @@ public class SupplierBean implements Serializable {
 
         PrimeFaces.current().ajax().update(Utilities.findComponent("search"));
         PrimeFaces.current().executeScript("PF('search').show()");
-        searchSupplier.setId(null);
+        readSupplier.setId(null);
     }
 
     /**
@@ -165,14 +199,14 @@ public class SupplierBean implements Serializable {
         Supplier supplier = suppliers.get(i);
 
         try {
-            SUPPLIER_DAO.update(tempSupplier.getId(), supplier);
+            SUPPLIER_DAO.update(updateSupplier.getId(), supplier);
         } catch (SQLException e) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Supplier not updated.",
                     "An error occurred while attempted to update the supplier.");
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
-        tempSupplier = new Supplier();
+        updateSupplier = new Supplier();
     }
 
     /**
@@ -180,6 +214,7 @@ public class SupplierBean implements Serializable {
      *
      * @param rowEditEvent Ajax behavior event
      */
+    @SuppressWarnings("unused")
     public void updateCancel(RowEditEvent<Object> rowEditEvent) {
 
         Utilities.addMessage(FacesMessage.SEVERITY_WARN, "Update canceled.", null);
@@ -191,16 +226,16 @@ public class SupplierBean implements Serializable {
     public void delete() {
 
         try {
-            SUPPLIER_DAO.delete(tempSupplier);
+            SUPPLIER_DAO.delete(updateSupplier);
             suppliers = SUPPLIER_DAO.readAll();
             Utilities.addMessage(FacesMessage.SEVERITY_INFO, "Supplier deleted.", null);
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Supplier not deleted.",
                     "An error occurred while attempting to delete the supplier");
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
-        tempSupplier = new Supplier();
+        updateSupplier = new Supplier();
     }
 
     /**
@@ -210,7 +245,7 @@ public class SupplierBean implements Serializable {
      */
     public void showDeleteDialog(Supplier supplier) {
 
-        tempSupplier = supplier;
+        updateSupplier = supplier;
         PrimeFaces.current().ajax().update(Utilities.findComponent("confirm"));
         PrimeFaces.current().executeScript("PF('delete').show()");
     }
@@ -222,8 +257,8 @@ public class SupplierBean implements Serializable {
      */
     public String deleteConfirm() {
 
-        String supplier = "ID = <b>" + tempSupplier.getId() + "</b>&nbsp;&nbsp;|&nbsp;&nbsp;Name = <b>" +
-                tempSupplier.getName() + "</b>";
+        String supplier = "ID = <b>" + updateSupplier.getId() + "</b>&nbsp;&nbsp;|&nbsp;&nbsp;Name = <b>" +
+                updateSupplier.getName() + "</b>";
 //            String warning =
 //                    "<div class='confirm-warning'><span class='confirm-warning-text'><b>Warning: </b>" + spj() +
 //                            " records in SPJ will be removed if you continue.</span></div>";
@@ -237,7 +272,7 @@ public class SupplierBean implements Serializable {
      */
     public void deleteCancel() {
 
-        tempSupplier = new Supplier();
+        updateSupplier = new Supplier();
     }
 
     /* todo: transfer this method */
@@ -245,7 +280,7 @@ public class SupplierBean implements Serializable {
 
         try {
             Connection connection = Database.connection(new User("root", "root", "admin"));
-            String sql = "SELECT COUNT(*) FROM spj WHERE snumber='" + tempSupplier.getId() + "'";
+            String sql = "SELECT COUNT(*) FROM spj WHERE snumber='" + updateSupplier.getId() + "'";
             ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
             if (resultSet.next()) return resultSet.getInt(1);
             connection.close();

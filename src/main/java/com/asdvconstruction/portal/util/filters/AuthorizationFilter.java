@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * @author Michael C. Herrera
  */
-@WebFilter("/faces/portal/*")
+@WebFilter("/portal/*")
 public class AuthorizationFilter implements Filter {
 
     /**
@@ -75,11 +75,8 @@ public class AuthorizationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
 
-        String template = request.getContextPath() + "/faces/resources/templates/tables-template.xhtml";
-
         if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect(request.getContextPath() + "/faces/index.xhtml");
-//            filterChain.doFilter(servletRequest, servletResponse);
+            response.sendRedirect(request.getContextPath() + "/index.xhtml");
         } else
             filterChain.doFilter(servletRequest, servletResponse);
     }

@@ -8,35 +8,49 @@
     <ui:define name="title">Supplier</ui:define>
 
     <ui:define name="add_button">
-        <p:commandButton value="Add Supplier" icon="pi pi-plus-circle"
+        <p:commandButton value="Add Supplier" icon="pi pi-plus-circle" onclick="PF('create').show()"
                          styleClass="ui-button-outlined ui-button-raised"/>
+        <p:dialog id="create" widgetVar="create" header="Add Supplier" modal="true">
+            <p:panelGrid columns="2" columnClasses="c-col1, c-col2">
+                <p:outputLabel value="Name" styleClass="c-label"/>
+                <p:inputText value="#{supplierBean.createSupplier.name}"/>
+                <p:outputLabel value="Date" styleClass="c-label"/>
+                <p:datePicker value="#{supplierBean.createSupplier.date}"/>
+                <p:outputLabel value="Count" styleClass="c-label"/>
+                <p:inputNumber value="#{supplierBean.createSupplier.count}" modifyValueOnWheel="false"/>
+                <p:outputLabel value="Location" styleClass="c-label"/>
+                <p:inputText value="#{supplierBean.createSupplier.location}"/>
+            </p:panelGrid>
+            <p:commandButton value="Insert Supplier" action="#{supplierBean.create()}"
+                             update="datatable messages" styleClass="c-button"/>
+        </p:dialog>
     </ui:define>
 
     <ui:define name="search">
         <p:toolbarGroup align="right">
             <p:inputNumber id="search_box" placeholder="Find Supplier" title="Search by ID"
-                           value="#{supplierBean.searchSupplier.id}"
-                           modifyValueOnWheel="false"/>
+                           value="#{supplierBean.readSupplier.id}"
+                           modifyValueOnWheel="false" immediate="true"/>
             <p:commandButton icon="pi pi-search" action="#{supplierBean.read()}"
                              styleClass="ui-button-raised"
                              update="search_box messages" style="display: inline"/>
             <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
-                <p:panelGrid columns="4" columnClasses="col1,col2,col3,col4">
+                <p:panelGrid columns="4" columnClasses="r-col1, r-col2, r-col3, r-col4">
                     <p:column>
-                        <p:outputLabel value="Name" styleClass="label"/>
-                        <p:outputLabel value="#{supplierBean.searchSupplier.name}" styleClass="content"/>
+                        <p:outputLabel value="Name" styleClass="r-label"/>
+                        <p:outputLabel value="#{supplierBean.readSupplier.name}" styleClass="r-content"/>
                     </p:column>
                     <p:column>
-                        <p:outputLabel value="Date" styleClass="label"/>
-                        <p:outputLabel value="#{supplierBean.searchSupplier.date}" styleClass="content"/>
+                        <p:outputLabel value="Date" styleClass="r-label"/>
+                        <p:outputLabel value="#{supplierBean.readSupplier.date}" styleClass="r-content"/>
                     </p:column>
                     <p:column>
-                        <p:outputLabel value="Count" styleClass="label"/>
-                        <p:outputLabel value="#{supplierBean.searchSupplier.count}" styleClass="content"/>
+                        <p:outputLabel value="Count" styleClass="r-label"/>
+                        <p:outputLabel value="#{supplierBean.readSupplier.count}" styleClass="r-content"/>
                     </p:column>
                     <p:column>
-                        <p:outputLabel value="Location" styleClass="label"/>
-                        <p:outputLabel value="#{supplierBean.searchSupplier.location}" styleClass="content"/>
+                        <p:outputLabel value="Location" styleClass="r-label"/>
+                        <p:outputLabel value="#{supplierBean.readSupplier.location}" styleClass="r-content"/>
                     </p:column>
                 </p:panelGrid>
             </p:dialog>
@@ -51,7 +65,7 @@
                     <f:facet name="output"><p:outputLabel value="#{supplier.id}"/></f:facet>
                     <f:facet name="input">
                         <p:inputNumber value="#{supplier.id}" validator="#{supplierBean.validateID}"
-                                       modifyValueOnWheel="false" disabled="true"/>
+                                       modifyValueOnWheel="false"/>
                     </f:facet>
                 </p:cellEditor>
             </p:column>

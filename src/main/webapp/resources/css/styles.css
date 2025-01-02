@@ -68,17 +68,31 @@ td[role=gridcell] {padding: 7px 0 5px 15px !important;}
 
 .mr-2 {margin-right: 1rem !important;}
 
-.col1, .col2, .col3, .col4 {
+/* Begin search dialog panelgrid */
+.r-col1, .r-col2, .r-col3, .r-col4 {
     line-height: 1.5em;
     width: fit-content !important;
     padding: 0 !important;
 }
 
-.label {
+.r-label {
     font-weight: bold;
     display: block;
     padding: 2px 15px 2px 5px;
     border: 1px solid black;
 }
 
-.content {padding: 0 15px 0 5px;}
+.r-content {padding: 0 15px 0 5px;}
+
+/* Begin create dialog panelgrid */
+.c-col1 {
+    width: 100px !important;
+    padding: 7px 0 0 !important;
+}
+
+.c-col2 {padding: 0 0 10px !important;}
+
+.c-button {
+    display: block !important;
+    margin: 5px auto 0 !important;
+}

@@ -22,29 +22,33 @@
             </p:toolbarGroup>
         </p:toolbar>
     </h:form>
-    <h:form styleClass="wrapper">
-        <p:toolbar styleClass="border">
-            <p:toolbarGroup>
-                <p:commandButton ajax="false" value="Supplier" action="/portal/supplier?faces-redirect=true"
-                                 styleClass="ui-button-raised ui-button-info mr-1"/>
-                <p:commandButton ajax="false" value="Part"
-                                 styleClass="ui-button-raised ui-button-success mr-1"/>
-                <p:commandButton ajax="false" value="Project"
-                                 styleClass="ui-button-raised ui-button-help mr-1"/>
-                <p:commandButton ajax="false" value="SPJ"
-                                 styleClass="ui-button-raised ui-button-warning mr-2"/>
+    <div class="wrapper">
+        <h:form id="tools">
+            <p:toolbar styleClass="border">
+                <p:toolbarGroup>
+                    <p:commandButton ajax="false" value="Supplier" action="/portal/supplier?faces-redirect=true"
+                                     styleClass="ui-button-raised ui-button-info mr-1"/>
+                    <p:commandButton ajax="false" value="Part"
+                                     styleClass="ui-button-raised ui-button-success mr-1"/>
+                    <p:commandButton ajax="false" value="Project"
+                                     styleClass="ui-button-raised ui-button-help mr-1"/>
+                    <p:commandButton ajax="false" value="SPJ"
+                                     styleClass="ui-button-raised ui-button-warning mr-2"/>
 
-                <i class="pi pi-ellipsis-v mr-2"/>
+                    <i class="pi pi-ellipsis-v mr-2"/>
 
-                <ui:insert name="add_button">Button to add record to table</ui:insert>
-            </p:toolbarGroup>
+                    <ui:insert name="add_button">Button to add record to table</ui:insert>
+                </p:toolbarGroup>
 
-            <ui:insert name="search">Search Tool to find a Record</ui:insert>
-        </p:toolbar>
-        <div id="table">
-            <ui:insert name="table">Main Datatable</ui:insert>
-        </div>
-    </h:form>
+                <ui:insert name="search">Search Tool to find a Record</ui:insert>
+            </p:toolbar>
+        </h:form>
+        <h:form id="datatable">
+            <div id="table">
+                <ui:insert name="table">Main Datatable</ui:insert>
+            </div>
+        </h:form>
+    </div>
 </h:body>
 
 </html>
