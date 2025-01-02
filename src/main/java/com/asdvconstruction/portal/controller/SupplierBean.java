@@ -141,8 +141,8 @@ public class SupplierBean implements Serializable {
      */
     public void create() {
 
-        if (createSupplier.getName() == null || createSupplier.getDate() == null ||
-                createSupplier.getLocation() == null) {
+        if (createSupplier.getName().isEmpty() || createSupplier.getDate() == null ||
+                createSupplier.getLocation().isEmpty()) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Supplier not added.",
                     "Name, date, and location cannot be empty.");
             return;
