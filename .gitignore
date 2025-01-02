@@ -1,4 +1,5 @@
 # Project exclude paths
-/target/!/.idea/
+!/target/
+!/.idea/
 !/nb-configuration.xml
 !/faces-config.NavData
