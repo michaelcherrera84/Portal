@@ -9,6 +9,7 @@
 <h:head>
     <title><ui:insert name="title"/></title>
     <h:outputStylesheet library="css" name="styles.css"/>
+    <ui:insert name="style"/>
 </h:head>
 
 <h:body>
@@ -18,8 +19,8 @@
             <p:toolbarGroup>
                 <p:graphicImage library="images" name="logo_horizontal.png" height="45px"/>
                 <p:spacer width="20px"/>
-                <i class="pi pi-bars mr-1"/>
-                <h1><p:outputLabel><ui:insert name="title"/> Table</p:outputLabel></h1>
+                <i class="pi pi-bars mr-2" style="color: #d1be9b"/>
+                <h1 id="header"><p:outputLabel><ui:insert name="title"/> Table</p:outputLabel></h1>
             </p:toolbarGroup>
             <p:toolbarGroup align="right">
                 <p:menuButton icon="pi pi-user" buttonStyleClass="rounded-button ui-button-raised ui-button-secondary">
@@ -55,6 +56,10 @@
             </div>
         </h:form>
     </div>
+    <footer>
+        <p:outputLabel styleClass="footer">Copyright &#169; 2025 Michael C. Herrera &#160;| &#160;No Rights
+            Reserved</p:outputLabel>
+    </footer>
 </h:body>
 
 </html>

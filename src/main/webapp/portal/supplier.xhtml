@@ -6,6 +6,24 @@
 
     <ui:define name="title">Supplier</ui:define>
 
+    <ui:define name="style">
+        <style>
+            body {background-color: rgba(2, 136, 209, 0.04)}
+
+            .wrapper {border: 3px double #0288d1;}
+
+            th {
+                color: white !important;
+                background-color: #0288d1 !important;
+            }
+
+            footer {
+                color: white;
+                background-color: #0288d1;
+            }
+        </style>
+    </ui:define>
+
     <ui:define name="add_button">
         <p:commandButton value="Add Supplier" icon="pi pi-plus-circle" onclick="PF('create').show()"
                          styleClass="ui-button-outlined ui-button-raised"/>
@@ -58,7 +76,9 @@
 
     <ui:define name="table">
         <p:dataTable id="supplier_table" editable="true" value="#{supplierBean.suppliers}" var="supplier"
-                     showGridlines="true" rowIndexVar="i" reflow="true">
+                     showGridlines="true" rowIndexVar="i" reflow="true" paginator="true"
+                     paginatorAlwaysVisible="false" paginatorPosition="bottom" rows="5"
+                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
             <p:column headerText="ID" sortBy="#{supplier.id}">
                 <p:cellEditor>
                     <f:facet name="output"><p:outputLabel value="#{supplier.id}"/></f:facet>
