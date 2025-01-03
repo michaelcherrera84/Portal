@@ -14,7 +14,13 @@
 <h:body>
     <p:growl id="messages" life="4000" showDetail="true" skipDetailIfEqualsSummary="true"/>
     <h:form>
-        <p:toolbar>
+        <p:toolbar styleClass="header">
+            <p:toolbarGroup>
+                <p:graphicImage library="images" name="logo_horizontal.png" height="45px"/>
+                <p:spacer width="20px"/>
+                <i class="pi pi-bars mr-1"/>
+                <h1><p:outputLabel><ui:insert name="title"/> Table</p:outputLabel></h1>
+            </p:toolbarGroup>
             <p:toolbarGroup align="right">
                 <p:menuButton icon="pi pi-user" buttonStyleClass="rounded-button ui-button-raised ui-button-secondary">
                     <p:menuitem value="Logout" action="#{login.logout()}" icon="pi pi-sign-out"/>
