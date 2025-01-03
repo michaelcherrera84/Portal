@@ -19,7 +19,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -167,16 +166,23 @@ public class SupplierBean implements Serializable {
      */
     public void read() {
 
-        for (Supplier supplier : suppliers)
-            if (Objects.equals(readSupplier.getId(), supplier.getId())) {
-                readSupplier = new Supplier(supplier);
+        try {
+            readSupplier = SUPPLIER_DAO.read(readSupplier.getId());
+            if (readSupplier != null) {
                 showReadDialog();
                 return;
             }
+        } catch (SQLException e) {
+            Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Search not completed.",
+                    "An error occurred while attempted to locate the supplier.");
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            readSupplier = new Supplier();
+            return;
+        }
 
-        readSupplier.setId(null);
         Utilities.addMessage(FacesMessage.SEVERITY_INFO, "Supplier not found.",
                 "No supplier exists with that ID.");
+        readSupplier = new Supplier();
     }
 
     /**

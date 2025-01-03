@@ -11,6 +11,7 @@ import java.io.IOException;
 /**
  * @author Michael C. Herrera
  */
+@SuppressWarnings("EmptyMethod")
 @WebFilter("/portal/*")
 public class AuthorizationFilter implements Filter {
 

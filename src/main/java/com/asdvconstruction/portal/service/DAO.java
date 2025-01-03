@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * @author Michael C. Herrera
  */
+@SuppressWarnings("UnusedReturnValue")
 public interface DAO<T> {
 
     /**

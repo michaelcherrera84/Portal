@@ -3,6 +3,7 @@ package com.asdvconstruction.portal.model;
 /**
  * @author Michael C. Herrera
  */
+@SuppressWarnings("unused")
 public class User {
 
     private String username;

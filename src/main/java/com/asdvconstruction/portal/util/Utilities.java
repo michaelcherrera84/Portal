@@ -23,7 +23,7 @@ public class Utilities {
     }
 
     /**
-     * Retuns a {@link UIComponent} based on the specified id value.
+     * Returns a {@link UIComponent} based on the specified id value.
      *
      * @param id specified id value
      * @return {@link UIComponent} based on the specified id value

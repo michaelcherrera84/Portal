@@ -88,6 +88,7 @@ public class Login implements Serializable {
      *
      * @return redirect
      */
+    @SuppressWarnings("SameReturnValue")
     public String logout() {
 
         ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).invalidate();

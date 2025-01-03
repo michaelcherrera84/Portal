@@ -120,6 +120,11 @@ public class Supplier {
         return date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
     }
 
+    /**
+     * Return a String representation of the Supplier.
+     *
+     * @return a String representation of the Supplier
+     */
     @Override
     public String toString() {
 

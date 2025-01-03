@@ -9,6 +9,7 @@ import java.io.IOException;
 /**
  * @author Michael C. Herrera
  */
+@SuppressWarnings("EmptyMethod")
 @WebFilter("/resources/*")
 public class TemplateFilter implements Filter {
 
@@ -17,6 +18,7 @@ public class TemplateFilter implements Filter {
         Filter.super.init(filterConfig);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {

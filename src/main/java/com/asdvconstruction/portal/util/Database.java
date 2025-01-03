@@ -20,7 +20,8 @@ public class Database {
      */
     public static Connection connection(User user) throws SQLException {
 
-        Driver driver = new Driver();
+        // Load the Driver. This is required for the DriverManager to connect to the database.
+        @SuppressWarnings("unused") Driver driver = new Driver();
         String ip = "localhost";
         String database = "ASDV_Construction";
         String url = "jdbc:mysql://" + ip + ":8889/" + database + "?allowPublicKeyRetrieval=true&useSSL=false";
@@ -34,6 +35,7 @@ public class Database {
      * @param connection the connection
      * @throws SQLException if there is a database access error or other errors
      */
+    @SuppressWarnings("unused")
     public static void closeConnection(Connection connection) throws SQLException {
 
         connection.close();
