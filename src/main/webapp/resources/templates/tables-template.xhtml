@@ -17,9 +17,7 @@
     <h:form>
         <p:toolbar styleClass="header">
             <p:toolbarGroup>
-                <p:graphicImage library="images" name="logo_horizontal.png" height="45px"/>
-                <p:spacer width="20px"/>
-                <i class="pi pi-bars mr-2" style="color: #d1be9b"/>
+                <ui:insert name="logo">Company Logo</ui:insert>
                 <h1 id="header"><p:outputLabel><ui:insert name="title"/> Table</p:outputLabel></h1>
             </p:toolbarGroup>
             <p:toolbarGroup align="right">
@@ -37,7 +35,7 @@
                                      styleClass="ui-button-raised ui-button-info mr-1"/>
                     <p:commandButton ajax="false" value="Part" action="/portal/part?faces-redirect=true"
                                      styleClass="ui-button-raised ui-button-success mr-1"/>
-                    <p:commandButton ajax="false" value="Project"
+                    <p:commandButton ajax="false" value="Project" action="/portal/project?faces-redirect=true"
                                      styleClass="ui-button-raised ui-button-help mr-1"/>
                     <p:commandButton ajax="false" value="SPJ"
                                      styleClass="ui-button-raised ui-button-warning mr-2"/>

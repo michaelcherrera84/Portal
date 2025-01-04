@@ -25,6 +25,12 @@
         </style>
     </ui:define>
 
+    <ui:define name="logo">
+        <p:graphicImage library="images" name="logo_horizontal_green.png" height="45px"/>
+        <p:spacer width="20px"/>
+        <i class="pi pi-bars mr-2" style="color: #689f38"/>
+    </ui:define>
+
     <ui:define name="add_button">
         <p:commandButton value="Add Part" icon="pi pi-plus-circle" onclick="PF('create').show()"
                          styleClass="ui-button-outlined ui-button-raised"/>
@@ -51,7 +57,7 @@
                              styleClass="ui-button-raised"
                              update="search_box messages" style="display: inline"/>
             <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
-                <p:panelGrid columns="4" columnClasses="r-col1, r-col2, r-col3">
+                <p:panelGrid columns="3" columnClasses="r-col1, r-col2, r-col3">
                     <p:column>
                         <p:outputLabel value="Name" styleClass="r-label"/>
                         <p:outputLabel value="#{partBean.readPart.name}" styleClass="r-content"/>
@@ -83,7 +89,7 @@
                     </f:facet>
                 </p:cellEditor>
             </p:column>
-            <p:column styleClass="nameCol" headerText="Name" sortBy="#{part.name}">
+            <p:column headerText="Name" sortBy="#{part.name}">
                 <p:cellEditor>
                     <f:facet name="output"><p:outputLabel value="#{part.name}"/></f:facet>
                     <f:facet name="input">

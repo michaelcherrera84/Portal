@@ -19,7 +19,6 @@ public class PartDAO implements DAO<Part> {
 
     HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
     User user = (User) session.getAttribute("user");
-//    User user = new User("root", "root", "admin");
 
     /**
      * Set the fields of a {@linkplain Part} using specified {@linkplain ResultSet}.
