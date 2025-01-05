@@ -55,7 +55,7 @@
     <ui:define name="search">
         <p:toolbarGroup align="right">
             <p:inputText id="search_box" placeholder="Find SPJ (ex. s-1, p-1, j-1)" title="Search by IDs"
-                         value="#{spjBean.readID}" modifyValueOnWheel="false" immediate="true"/>
+                         value="#{spjBean.readID}" immediate="true"/>
             <p:commandButton icon="pi pi-search" action="#{spjBean.read()}" styleClass="ui-button-raised"
                              update="search_box messages" style="display: inline"/>
             <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
