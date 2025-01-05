@@ -45,7 +45,7 @@
                 <p:outputLabel value="Location" styleClass="c-label"/>
                 <p:inputText value="#{supplierBean.createSupplier.location}" maxlength="30"/>
             </p:panelGrid>
-            <p:commandButton value="Insert Supplier" action="#{supplierBean.create()}"
+            <p:commandButton id="insert" value="Insert Supplier" action="#{supplierBean.create()}"
                              update="datatable messages" styleClass="c-button"/>
         </p:dialog>
     </ui:define>
@@ -55,8 +55,7 @@
             <p:inputNumber id="search_box" placeholder="Find Supplier" title="Search by ID"
                            value="#{supplierBean.readSupplier.id}"
                            modifyValueOnWheel="false" immediate="true"/>
-            <p:commandButton icon="pi pi-search" action="#{supplierBean.read()}"
-                             styleClass="ui-button-raised"
+            <p:commandButton icon="pi pi-search" action="#{supplierBean.read()}" styleClass="ui-button-raised"
                              update="search_box messages" style="display: inline"/>
             <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
                 <p:panelGrid columns="4" columnClasses="r-col1, r-col2, r-col3, r-col4">

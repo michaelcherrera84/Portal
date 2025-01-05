@@ -1,22 +1,19 @@
 package com.asdvconstruction.portal.controller;
 
 import com.asdvconstruction.portal.model.Supplier;
-import com.asdvconstruction.portal.model.User;
 import com.asdvconstruction.portal.service.SupplierDAO;
-import com.asdvconstruction.portal.util.Database;
 import com.asdvconstruction.portal.util.Utilities;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.inputnumber.InputNumber;
 import org.primefaces.event.RowEditEvent;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -31,6 +28,13 @@ import java.util.logging.Logger;
 @Named(value = "supplierBean")
 @ViewScoped
 public class SupplierBean implements Serializable {
+
+    /**
+     * The SPJBean is a CDI managed bean responsible for handling user operations related to the spj. xhtml page and the
+     * spj table.
+     */
+    @Inject
+    SPJBean spjBean;
 
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
 
@@ -68,6 +72,7 @@ public class SupplierBean implements Serializable {
         createSupplier = new Supplier();
         readSupplier = new Supplier();
 
+        // Populate the list to be used by the datatable.
         try {
             suppliers = SUPPLIER_DAO.readAll();
         } catch (SQLException e) {
@@ -90,10 +95,7 @@ public class SupplierBean implements Serializable {
      *
      * @param createSupplier new value of createSupplier
      */
-    public void setCreateSupplier(Supplier createSupplier) {
-
-        this.createSupplier = createSupplier;
-    }
+    public void setCreateSupplier(Supplier createSupplier) {this.createSupplier = createSupplier;}
 
     /**
      * Get the value of searchSupplier.
@@ -107,10 +109,7 @@ public class SupplierBean implements Serializable {
      *
      * @param readSupplier new value of searchSupplier
      */
-    public void setReadSupplier(Supplier readSupplier) {
-
-        this.readSupplier = readSupplier;
-    }
+    public void setReadSupplier(Supplier readSupplier) {this.readSupplier = readSupplier;}
 
     /**
      * Get the value of suppliers.
@@ -140,25 +139,31 @@ public class SupplierBean implements Serializable {
      */
     public void create() {
 
+        // If required columns are empty, display an error message and update the form.
         if (createSupplier.getName().isEmpty() || createSupplier.getDate() == null ||
                 createSupplier.getLocation().isEmpty()) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Supplier not added.",
                     "Name, date, and location cannot be empty.");
+            createSupplier = new Supplier();
+            PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
+            PrimeFaces.current().executeScript("PF('create').show()");
             return;
         }
 
-            try {
-                SUPPLIER_DAO.create(createSupplier);
-                suppliers = SUPPLIER_DAO.readAll();
-            } catch (SQLException e) {
-                Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Supplier not added.",
-                        "An error occurred while attempted to insert the supplier.");
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            }
+        // Add the tuple and update the list.
+        try {
+            SUPPLIER_DAO.create(createSupplier);
+            suppliers = SUPPLIER_DAO.readAll();
+        } catch (SQLException e) {
+            Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Supplier not added.",
+                    "An error occurred while attempted to insert the supplier.");
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
 
+        // Reset the form.
+        createSupplier = new Supplier();
         PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
         PrimeFaces.current().executeScript("PF('create').hide()");
-        createSupplier = new Supplier();
     }
 
     /**
@@ -263,14 +268,28 @@ public class SupplierBean implements Serializable {
      */
     public String deleteConfirm() {
 
+        // Get the number of rows in other tables that will be deleted via cascade if this tuple is deleted.
+        int spjRows = 0;
+        if (updateSupplier.getId() != null) {
+            try {
+                spjRows = spjBean.getSPJ_DAO().supplierCount(updateSupplier.getId());
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+
         String supplier = "ID = <b>" + updateSupplier.getId() + "</b>&nbsp;&nbsp;|&nbsp;&nbsp;Name = <b>" +
                 updateSupplier.getName() + "</b>";
-//            String warning =
-//                    "<div class='confirm-warning'><span class='confirm-warning-text'><b>Warning: </b>" + spj() +
-//                            " records in SPJ will be removed if you continue.</span></div>";
+        String warning =  // warning message indicating the number of records that will be removed via cascade
+                "<div class='confirm-warning'><span class='confirm-warning-text'><b>Warning: </b>" + spjRows +
+                        " records in SPJ will be removed if you continue.</span></div>";
         String confirm = "<div class='confirm-text'>Are you sure you would like to delete the supplier?</div>";
-        return supplier + confirm;
-//            return supplier + confirm + warning;
+
+        // Do not include warning if no records will be removed from other tables.
+        if (spjRows == 0)
+            return supplier + confirm;
+
+        return supplier + confirm + warning;
     }
 
     /**
@@ -279,21 +298,5 @@ public class SupplierBean implements Serializable {
     public void deleteCancel() {
 
         updateSupplier = new Supplier();
-    }
-
-    /* todo: transfer this method */
-    int spj() {
-
-        try {
-            Connection connection = Database.connection(new User("root", "root", "admin"));
-            String sql = "SELECT COUNT(*) FROM spj WHERE snumber='" + updateSupplier.getId() + "'";
-            ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-            if (resultSet.next()) return resultSet.getInt(1);
-            connection.close();
-        } catch (Exception ignored) {
-
-        }
-
-        return 0;
     }
 }

@@ -7,6 +7,7 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.inputnumber.InputNumber;
@@ -27,6 +28,13 @@ import java.util.logging.Logger;
 @Named(value = "projectBean")
 @ViewScoped
 public class ProjectBean implements Serializable {
+
+    /**
+     * The SPJBean is a CDI managed bean responsible for handling user operations related to the spj. xhtml page and the
+     * spj table.
+     */
+    @Inject
+    SPJBean spjBean;
 
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
 
@@ -64,6 +72,7 @@ public class ProjectBean implements Serializable {
         createProject = new Project();
         readProject = new Project();
 
+        // Populate the list to be used by the datatable.
         try {
             projects = PROJECT_DAO.readAll();
         } catch (SQLException e) {
@@ -86,10 +95,7 @@ public class ProjectBean implements Serializable {
      *
      * @param createProject new value of createProject
      */
-    public void setCreateProject(Project createProject) {
-
-        this.createProject = createProject;
-    }
+    public void setCreateProject(Project createProject) {this.createProject = createProject;}
 
     /**
      * Get the value of searchProject.
@@ -103,10 +109,7 @@ public class ProjectBean implements Serializable {
      *
      * @param readProject new value of searchProject
      */
-    public void setReadProject(Project readProject) {
-
-        this.readProject = readProject;
-    }
+    public void setReadProject(Project readProject) {this.readProject = readProject;}
 
     /**
      * Get the value of projects.
@@ -136,12 +139,17 @@ public class ProjectBean implements Serializable {
      */
     public void create() {
 
+        // If required columns are empty, display an error message and update the form.
         if (createProject.getName().isEmpty() || createProject.getLocation().isEmpty()) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Project not added.",
                     "Name and location cannot be empty.");
+            createProject = new Project();
+            PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
+            PrimeFaces.current().executeScript("PF('create').show()");
             return;
         }
 
+        // Add the tuple and update the list.
         try {
             PROJECT_DAO.create(createProject);
             projects = PROJECT_DAO.readAll();
@@ -151,9 +159,10 @@ public class ProjectBean implements Serializable {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
+        // Reset the form.
+        createProject = new Project();
         PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
         PrimeFaces.current().executeScript("PF('create').hide()");
-        createProject = new Project();
     }
 
     /**
@@ -258,14 +267,28 @@ public class ProjectBean implements Serializable {
      */
     public String deleteConfirm() {
 
+        // Get the number of rows in other tables that will be deleted via cascade if this tuple is deleted.
+        int spjRows = 0;
+        if (updateProject.getId() != null) {
+            try {
+                spjRows = spjBean.getSPJ_DAO().projectCount(updateProject.getId());
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+
         String project = "ID = <b>" + updateProject.getId() + "</b>&nbsp;&nbsp;|&nbsp;&nbsp;Name = <b>" +
                 updateProject.getName() + "</b>";
-//            String warning =
-//                    "<div class='confirm-warning'><span class='confirm-warning-text'><b>Warning: </b>" + spj() +
-//                            " records in SPJ will be removed if you continue.</span></div>";
+        String warning =  // warning message indicating the number of records that will be removed via cascade
+                "<div class='confirm-warning'><span class='confirm-warning-text'><b>Warning: </b>" + spjRows +
+                        " records in SPJ will be removed if you continue.</span></div>";
         String confirm = "<div class='confirm-text'>Are you sure you would like to delete the project?</div>";
-        return project + confirm;
-//            return project + confirm + warning;
+
+        // Do not include warning if no records will be removed from other tables.
+        if (spjRows == 0)
+            return project + confirm;
+
+        return project + confirm + warning;
     }
 
     /**

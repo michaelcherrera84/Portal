@@ -38,10 +38,10 @@
             <p:panelGrid columns="2" columnClasses="c-col1, c-col2">
                 <p:outputLabel value="Name" styleClass="c-label"/>
                 <p:inputText value="#{projectBean.createProject.name}" maxlength="30"/>
-                <p:outputLabel value="Count" styleClass="c-label"/>
+                <p:outputLabel value="Location" styleClass="c-label"/>
                 <p:inputText value="#{projectBean.createProject.location}" maxlength="30"/>
             </p:panelGrid>
-            <p:commandButton value="Insert Project" action="#{projectBean.create()}"
+            <p:commandButton id="insert" value="Insert Project" action="#{projectBean.create()}"
                              update="datatable messages" styleClass="c-button"/>
         </p:dialog>
     </ui:define>
@@ -49,10 +49,8 @@
     <ui:define name="search">
         <p:toolbarGroup align="right">
             <p:inputNumber id="search_box" placeholder="Find Project" title="Search by ID"
-                           value="#{projectBean.readProject.id}"
-                           modifyValueOnWheel="false" immediate="true"/>
-            <p:commandButton icon="pi pi-search" action="#{projectBean.read()}"
-                             styleClass="ui-button-raised"
+                           value="#{projectBean.readProject.id}" modifyValueOnWheel="false" immediate="true"/>
+            <p:commandButton icon="pi pi-search" action="#{projectBean.read()}" styleClass="ui-button-raised"
                              update="search_box messages" style="display: inline"/>
             <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
                 <p:panelGrid columns="2" columnClasses="r-col1, r-col2">

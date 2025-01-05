@@ -38,23 +38,21 @@
             <p:panelGrid columns="2" columnClasses="c-col1, c-col2">
                 <p:outputLabel value="Name" styleClass="c-label"/>
                 <p:inputText value="#{partBean.createPart.name}" maxlength="30"/>
-                <p:outputLabel value="Count" styleClass="c-label"/>
+                <p:outputLabel value="Category" styleClass="c-label"/>
                 <p:inputText value="#{partBean.createPart.category}" maxlength="20"/>
                 <p:outputLabel value="Location" styleClass="c-label"/>
                 <p:inputText value="#{partBean.createPart.location}" maxlength="30"/>
             </p:panelGrid>
-            <p:commandButton value="Insert Part" action="#{partBean.create()}"
+            <p:commandButton id="insert" value="Insert Part" action="#{partBean.create()}"
                              update="datatable messages" styleClass="c-button"/>
         </p:dialog>
     </ui:define>
 
     <ui:define name="search">
         <p:toolbarGroup align="right">
-            <p:inputNumber id="search_box" placeholder="Find Part" title="Search by ID"
-                           value="#{partBean.readPart.id}"
+            <p:inputNumber id="search_box" placeholder="Find Part" title="Search by ID" value="#{partBean.readPart.id}"
                            modifyValueOnWheel="false" immediate="true"/>
-            <p:commandButton icon="pi pi-search" action="#{partBean.read()}"
-                             styleClass="ui-button-raised"
+            <p:commandButton icon="pi pi-search" action="#{partBean.read()}" styleClass="ui-button-raised"
                              update="search_box messages" style="display: inline"/>
             <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
                 <p:panelGrid columns="3" columnClasses="r-col1, r-col2, r-col3">
@@ -63,7 +61,7 @@
                         <p:outputLabel value="#{partBean.readPart.name}" styleClass="r-content"/>
                     </p:column>
                     <p:column>
-                        <p:outputLabel value="Count" styleClass="r-label"/>
+                        <p:outputLabel value="Category" styleClass="r-label"/>
                         <p:outputLabel value="#{partBean.readPart.category}" styleClass="r-content"/>
                     </p:column>
                     <p:column>

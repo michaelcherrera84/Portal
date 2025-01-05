@@ -1,0 +1,142 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/resources/templates/tables-template.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">SPJ</ui:define>
+
+    <ui:define name="style">
+        <!--suppress CssUnusedSymbol -->
+        <style>
+            body {background-color: rgba(251, 192, 45, 0.04);}
+
+            .wrapper {border: 3px double #fbc02d;}
+
+            th {
+                color: #212529 !important;
+                background-color: #fbc02d !important;
+            }
+
+            footer {
+                color: #212529;
+                background-color: #fbc02d;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="logo">
+        <p:graphicImage library="images" name="logo_horizontal_yellow.png" height="45px"/>
+        <p:spacer width="20px"/>
+        <i class="pi pi-bars mr-2" style="color: #689f38"/>
+    </ui:define>
+
+    <ui:define name="add_button">
+        <p:commandButton value="Add SPJ" icon="pi pi-plus-circle" onclick="PF('create').show()"
+                         styleClass="ui-button-outlined ui-button-raised"/>
+        <p:dialog id="create" widgetVar="create" header="Add SPJ (numbers only)" modal="true">
+            <p:panelGrid columns="2" columnClasses="c-col1, c-col2">
+                <p:outputLabel value="s-ID" styleClass="c-label"/>
+                <p:inputNumber value="#{spjBean.createSPJ.sid}" modifyValueOnWheel="false"/>
+                <p:outputLabel value="p-ID" styleClass="c-label"/>
+                <p:inputNumber value="#{spjBean.createSPJ.pid}" modifyValueOnWheel="false"/>
+                <p:outputLabel value="j-ID" styleClass="c-label"/>
+                <p:inputNumber value="#{spjBean.createSPJ.jid}" modifyValueOnWheel="false"/>
+                <p:outputLabel value="Quantity" styleClass="c-label"/>
+                <p:inputNumber value="#{spjBean.createSPJ.qty}" modifyValueOnWheel="false"/>
+            </p:panelGrid>
+            <p:commandButton id="insert" value="Insert SPJ" action="#{spjBean.create()}"
+                             update="datatable messages" styleClass="c-button"/>
+        </p:dialog>
+    </ui:define>
+
+    <ui:define name="search">
+        <p:toolbarGroup align="right">
+            <p:inputText id="search_box" placeholder="Find SPJ (ex. s-1, p-1, j-1)" title="Search by IDs"
+                         value="#{spjBean.readID}" modifyValueOnWheel="false" immediate="true"/>
+            <p:commandButton icon="pi pi-search" action="#{spjBean.read()}" styleClass="ui-button-raised"
+                             update="search_box messages" style="display: inline"/>
+            <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
+                <p:panelGrid columns="4" columnClasses="r-col1, r-col2, r-col3, r-col4">
+                    <p:column>
+                        <p:outputLabel value="s-ID" styleClass="r-label"/>
+                        <p:outputLabel styleClass="r-content">s-#{spjBean.readSPJ.sid}</p:outputLabel>
+                    </p:column>
+                    <p:column>
+                        <p:outputLabel value="p-ID" styleClass="r-label"/>
+                        <p:outputLabel styleClass="r-content">p-#{spjBean.readSPJ.pid}</p:outputLabel>
+                    </p:column>
+                    <p:column>
+                        <p:outputLabel value="j-ID" styleClass="r-label"/>
+                        <p:outputLabel styleClass="r-content">j-#{spjBean.readSPJ.jid}</p:outputLabel>
+                    </p:column>
+                    <p:column>
+                        <p:outputLabel value="Quantity" styleClass="r-label"/>
+                        <p:outputLabel value="#{spjBean.readSPJ.qty}" styleClass="r-content"/>
+                    </p:column>
+                </p:panelGrid>
+            </p:dialog>
+        </p:toolbarGroup>
+    </ui:define>
+
+    <ui:define name="table">
+        <p:dataTable id="spj_table" editable="true" value="#{spjBean.SPJs}" var="spj"
+                     showGridlines="true" rowIndexVar="i" reflow="true" paginator="true"
+                     paginatorAlwaysVisible="false" paginatorPosition="bottom" rows="5"
+                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+            <p:column headerText="Supplier ID" sortBy="#{spj.sid}">
+                <p:cellEditor>
+                    <f:facet name="output"><p:outputLabel>s-#{spj.sid}</p:outputLabel></f:facet>
+                    <f:facet name="input">
+                        <!--suppress ELValidationInspection -->
+                        <p:inputNumber value="#{spj.sid}" modifyValueOnWheel="false" validator="#{spjBean.getIDs(i)}"/>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Part ID" sortBy="#{spj.pid}">
+                <p:cellEditor>
+                    <f:facet name="output"><p:outputLabel>p-#{spj.pid}</p:outputLabel></f:facet>
+                    <f:facet name="input">
+                        <p:inputNumber value="#{spj.pid}" modifyValueOnWheel="false"/>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Project ID" sortBy="#{spj.jid}">
+                <p:cellEditor>
+                    <f:facet name="output"><p:outputLabel>j-#{spj.jid}</p:outputLabel></f:facet>
+                    <f:facet name="input">
+                        <p:inputNumber value="#{spj.jid}" modifyValueOnWheel="false"/>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Quantity" sortBy="#{spj.qty}">
+                <p:cellEditor>
+                    <f:facet name="output"><p:outputLabel value="#{spj.qty}"/></f:facet>
+                    <f:facet name="input">
+                        <p:inputNumber value="#{spj.qty}" modifyValueOnWheel="false"/>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column styleClass="updateCol"><p:rowEditor styleClass="row-editor"/>
+                <p:commandButton process="@this" action="#{spjBean.showDeleteDialog(spj)}"
+                                 styleClass="ui-button-raised ui-button-danger delete-button" icon="pi pi-trash"/>
+                <p:dialog id="confirm" widgetVar="delete" header="Delete SPJ" modal="true" closeOnEscape="true"
+                          styleClass="left">
+                    <p:outputLabel value="#{spjBean.deleteConfirm()}" escape="false"/>
+                    <div class="confirm-buttons">
+                        <p:commandButton value="Cancel" styleClass="ui-button-flat ui-button-plain"
+                                         action="#{spjBean.deleteCancel()}" onclick="PF('delete').hide()"/>
+                        <p:spacer width="5px"/>
+                        <p:commandButton value="Confirm" styleClass="ui-button-raised ui-button-danger"
+                                         action="#{spjBean.delete()}" onclick="PF('delete').hide()"
+                                         update="spj_table messages"/>
+                    </div>
+                </p:dialog>
+            </p:column>
+            <!--suppress ELValidationInspection -->
+            <p:ajax event="rowEdit" listener="#{spjBean.update(i)}" update="messages spj_table"/>
+            <p:ajax event="rowEditCancel" listener="#{spjBean.updateCancel}" update="messages spj_table"/>
+        </p:dataTable>
+    </ui:define>
+
+</ui:composition>
