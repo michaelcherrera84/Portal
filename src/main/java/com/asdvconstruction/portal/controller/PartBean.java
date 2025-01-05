@@ -143,9 +143,6 @@ public class PartBean implements Serializable {
         if (createPart.getName().isEmpty() || createPart.getLocation().isEmpty()) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Part not added.",
                     "Name and location cannot be empty.");
-            createPart = new Part();
-            PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
-            PrimeFaces.current().executeScript("PF('create').show()");
             return;
         }
 
@@ -163,6 +160,15 @@ public class PartBean implements Serializable {
         createPart = new Part();
         PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
         PrimeFaces.current().executeScript("PF('create').hide()");
+    }
+
+    /**
+     * Reset the create dialog.
+     */
+    public void createReset() {
+
+        createPart = new Part();
+        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
     }
 
     /**

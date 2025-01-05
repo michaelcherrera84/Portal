@@ -146,9 +146,6 @@ public class SPJBean implements Serializable {
                 createSPJ.getQty() == null) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "SPJ not added.",
                     "Fields cannot be empty.");
-            createSPJ = new SPJ();
-            PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
-            PrimeFaces.current().executeScript("PF('create').show()");
             return;
         }
 
@@ -166,6 +163,15 @@ public class SPJBean implements Serializable {
         createSPJ = new SPJ();
         PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
         PrimeFaces.current().executeScript("PF('create').hide()");
+    }
+
+    /**
+     * Reset the create dialog.
+     */
+    public void createReset() {
+
+        createSPJ = new SPJ();
+        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
     }
 
     /**

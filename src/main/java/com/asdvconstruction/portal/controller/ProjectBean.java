@@ -143,9 +143,6 @@ public class ProjectBean implements Serializable {
         if (createProject.getName().isEmpty() || createProject.getLocation().isEmpty()) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Project not added.",
                     "Name and location cannot be empty.");
-            createProject = new Project();
-            PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
-            PrimeFaces.current().executeScript("PF('create').show()");
             return;
         }
 
@@ -163,6 +160,15 @@ public class ProjectBean implements Serializable {
         createProject = new Project();
         PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
         PrimeFaces.current().executeScript("PF('create').hide()");
+    }
+
+    /**
+     * Reset the create dialog.
+     */
+    public void createReset() {
+
+        createProject = new Project();
+        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
     }
 
     /**

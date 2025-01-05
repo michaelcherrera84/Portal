@@ -91,7 +91,29 @@ footer .footer {font-size: .5em}
     padding: .25rem !important;
 }
 
-/* Begin search dialog panelgrid */
+/* -------------------------------------------- Login -*/
+#login {
+    margin: 20px;
+    padding: 30px 50px 40px;
+    width: fit-content;
+    border: 4px double #2196f3;
+    text-align: center;
+}
+
+.login-label {
+    color: #495057;
+    font-weight: normal;
+    font-size: 1em !important;
+}
+
+.login-button {
+    display: block;
+    width: 100%;
+    margin: 20px auto 0 !important;
+}
+/*-----------------------------------------------------*/
+
+/* -------------------------- Search dialog panelgrid -*/
 .r-col1, .r-col2, .r-col3, .r-col4 {
     line-height: 1.5em;
     width: fit-content !important;
@@ -106,8 +128,9 @@ footer .footer {font-size: .5em}
 }
 
 .r-content {padding: 0 15px 0 5px;}
+/*-----------------------------------------------------*/
 
-/* Begin create dialog panelgrid */
+/* -------------------------- Create dialog panelgrid -*/
 .c-col1 {
     width: 100px !important;
     padding: 7px 0 0 !important;
@@ -119,3 +142,4 @@ footer .footer {font-size: .5em}
     display: block !important;
     margin: 5px auto 0 !important;
 }
+/*-----------------------------------------------------*/

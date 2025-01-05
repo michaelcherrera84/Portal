@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Employee Portal</title>
+    <h:outputStylesheet library="css" name="styles.css"/>
+</h:head>
+
+<h:body>
+    <h:form>
+        <p:toolbar styleClass="header">
+            <p:toolbarGroup>
+                <p:graphicImage library="images" name="logo_horizontal_blue.png" height="45px"/>
+                <p:spacer width="20px"/>
+                <i class="pi pi-bars mr-2" style="color: #2196f3"/>
+                <h1 id="header"><p:outputLabel>Employee Portal</p:outputLabel></h1>
+            </p:toolbarGroup>
+            <p:toolbarGroup align="right">
+                <p:menuButton icon="pi pi-user" buttonStyleClass="rounded-button ui-button-raised ui-button-secondary">
+                    <p:menuitem value="Logout" action="#{login.logout()}" icon="pi pi-sign-out"/>
+                </p:menuButton>
+            </p:toolbarGroup>
+        </p:toolbar>
+        <p:commandLink value="Supplier Table" action="/portal/supplier?faces-redirect=true"/>
+        <p:commandLink value="Part Table" action="/portal/part?faces-redirect=true"/>
+        <p:commandLink value="Project Table" action="/portal/project?faces-redirect=true"/>
+        <p:commandLink value="SPJ Table" action="/portal/spj?faces-redirect=true"/>
+    </h:form>
+</h:body>
+
+</html>

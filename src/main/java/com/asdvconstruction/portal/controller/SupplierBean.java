@@ -144,9 +144,6 @@ public class SupplierBean implements Serializable {
                 createSupplier.getLocation().isEmpty()) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Supplier not added.",
                     "Name, date, and location cannot be empty.");
-            createSupplier = new Supplier();
-            PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
-            PrimeFaces.current().executeScript("PF('create').show()");
             return;
         }
 
@@ -164,6 +161,15 @@ public class SupplierBean implements Serializable {
         createSupplier = new Supplier();
         PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
         PrimeFaces.current().executeScript("PF('create').hide()");
+    }
+
+    /**
+     * Reset the create dialog.
+     */
+    public void createReset() {
+
+        createSupplier = new Supplier();
+        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
     }
 
     /**

@@ -26,14 +26,16 @@
     </ui:define>
 
     <ui:define name="logo">
-        <p:graphicImage library="images" name="logo_horizontal_green.png" height="45px"/>
+        <p:link title="Employee - Home" href="./index.xhtml">
+            <p:graphicImage library="images" name="logo_horizontal_green.png" height="45px"/>
+        </p:link>
         <p:spacer width="20px"/>
         <i class="pi pi-bars mr-2" style="color: #689f38"/>
     </ui:define>
 
     <ui:define name="add_button">
-        <p:commandButton value="Add Part" icon="pi pi-plus-circle" onclick="PF('create').show()"
-                         styleClass="ui-button-outlined ui-button-raised"/>
+        <p:commandButton action="#{partBean.createReset()}" value="Add Part" icon="pi pi-plus-circle"
+                         oncomplete="PF('create').show()" styleClass="ui-button-outlined ui-button-raised"/>
         <p:dialog id="create" widgetVar="create" header="Add Part" modal="true">
             <p:panelGrid columns="2" columnClasses="c-col1, c-col2">
                 <p:outputLabel value="Name" styleClass="c-label"/>

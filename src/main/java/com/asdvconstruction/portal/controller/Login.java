@@ -66,13 +66,13 @@ public class Login implements Serializable {
      */
     public String login() {
 
-//        user = new User(username, password, "admin");
-        user = new User("root", "root", "admin");
+        user = new User(username, password, "admin");
+//        user = new User("root", "root", "admin");
 
-        try (Connection connection = Database.connection(user)) {
+        try (Connection ignored = Database.connection(user)) {
             ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).setAttribute(
                     "user", user);
-            return "/portal/supplier?faces-redirect=true";
+            return "/portal/index?faces-redirect=true";
         } catch (SQLException e) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Incorrect Login", null);
             username = null;
