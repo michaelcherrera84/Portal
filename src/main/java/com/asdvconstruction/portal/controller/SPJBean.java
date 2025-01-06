@@ -5,6 +5,9 @@ import com.asdvconstruction.portal.service.SPJDAO;
 import com.asdvconstruction.portal.util.Utilities;
 import jakarta.faces.application.FacesMessage;
 
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.validator.ValidatorException;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import org.primefaces.PrimeFaces;
@@ -137,17 +140,36 @@ public class SPJBean implements Serializable {
     public List<SPJ> getSPJs() {return spjs;}
 
     /**
+     * Validate a value provided for an sid and store the previous spj.
+     */
+    @SuppressWarnings("unused")
+    public void validateID(Integer i) {updateSPJ = new SPJ(spjs.get(i));}
+
+    /**
+     * Validate required fields.
+     *
+     * @param facesContext per-request state information related to the processing of the Jakarta Faces request, and the
+     *                     rendering of the corresponding response
+     * @param uiComponent  user interface component that will contain the value to be validated
+     * @param o            value to be validated
+     */
+    @SuppressWarnings("unused")
+    public void validateRequired(FacesContext facesContext, UIComponent uiComponent, Object o) {
+
+        if (o == null)
+            throw new ValidatorException(
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "All fields are required", null));
+        else if (o instanceof String && ((String) o).isEmpty())
+            throw new ValidatorException(
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "All fields are required", null));
+    }
+
+    /**
      * Insert a new spj.
      */
     public void create() {
-
-        // If required columns are empty, display an error message and update the form.
-        if (createSPJ.getSid() == null || createSPJ.getPid() == null || createSPJ.getJid() == null ||
-                createSPJ.getQty() == null) {
-            Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "SPJ not added.",
-                    "Fields cannot be empty.");
-            return;
-        }
 
         // Add the tuple and update the list.
         try {
@@ -159,19 +181,8 @@ public class SPJBean implements Serializable {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
-        // Reset the form.
         createSPJ = new SPJ();
-        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
         PrimeFaces.current().executeScript("PF('create').hide()");
-    }
-
-    /**
-     * Reset the create dialog.
-     */
-    public void createReset() {
-
-        createSPJ = new SPJ();
-        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
     }
 
     /**
@@ -257,6 +268,7 @@ public class SPJBean implements Serializable {
 
         try {
             SPJ_DAO.update(updateSPJ, spj);
+            spjs = SPJ_DAO.readAll();
         } catch (SQLException e) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "SPJ not updated.",
                     "An error occurred while attempted to update the spj.");
@@ -265,13 +277,6 @@ public class SPJBean implements Serializable {
 
         updateSPJ = new SPJ();
     }
-
-    /**
-     * Store old IDs of an SPJ before update.
-     *
-     * @param i index of a spj in {@linkplain #spjs}
-     */
-    public void getIDs(int i) {updateSPJ = new SPJ(spjs.get(i));}
 
     /**
      * Confirm spj update was canceled.

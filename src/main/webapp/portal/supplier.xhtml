@@ -1,4 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:f="jakarta.faces.core"
                 template="/resources/templates/tables-template.xhtml"
@@ -34,18 +35,22 @@
     </ui:define>
 
     <ui:define name="add_button">
-        <p:commandButton action="#{supplierBean.createReset()}" value="Add Supplier" icon="pi pi-plus-circle"
-                         oncomplete="PF('create').show()" styleClass="ui-button-outlined ui-button-raised"/>
+        <p:commandButton value="Add Supplier" icon="pi pi-plus-circle" oncomplete="PF('create').show()"
+                         styleClass="ui-button-outlined ui-button-raised">
+            <p:ajax update="create" resetValues="true"/>
+        </p:commandButton>
         <p:dialog id="create" widgetVar="create" header="Add Supplier" modal="true">
             <p:panelGrid columns="2" columnClasses="c-col1, c-col2">
                 <p:outputLabel value="Name" styleClass="c-label"/>
-                <p:inputText value="#{supplierBean.createSupplier.name}" maxlength="30"/>
+                <p:inputText value="#{supplierBean.createSupplier.name}" maxlength="30"
+                             validator="#{supplierBean.validateRequired}"/>
                 <p:outputLabel value="Date" styleClass="c-label"/>
-                <p:datePicker value="#{supplierBean.createSupplier.date}"/>
+                <p:datePicker value="#{supplierBean.createSupplier.date}" validator="#{supplierBean.validateRequired}"/>
                 <p:outputLabel value="Count" styleClass="c-label"/>
                 <p:inputNumber value="#{supplierBean.createSupplier.count}" modifyValueOnWheel="false"/>
                 <p:outputLabel value="Location" styleClass="c-label"/>
-                <p:inputText value="#{supplierBean.createSupplier.location}" maxlength="30"/>
+                <p:inputText value="#{supplierBean.createSupplier.location}" maxlength="30"
+                             validator="#{supplierBean.validateRequired}"/>
             </p:panelGrid>
             <p:commandButton id="insert" value="Insert Supplier" action="#{supplierBean.create()}"
                              update="datatable messages" styleClass="c-button"/>
@@ -54,31 +59,32 @@
 
     <ui:define name="search">
         <p:toolbarGroup align="right">
-            <p:inputNumber id="search_box" placeholder="Find Supplier" title="Search by ID"
-                           value="#{supplierBean.readSupplier.id}"
-                           modifyValueOnWheel="false" immediate="true"/>
-            <p:commandButton icon="pi pi-search" action="#{supplierBean.read()}" styleClass="ui-button-raised"
-                             update="search_box messages" style="display: inline"/>
-            <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
-                <p:panelGrid columns="4" columnClasses="r-col1, r-col2, r-col3, r-col4">
-                    <p:column>
-                        <p:outputLabel value="Name" styleClass="r-label"/>
-                        <p:outputLabel value="#{supplierBean.readSupplier.name}" styleClass="r-content"/>
-                    </p:column>
-                    <p:column>
-                        <p:outputLabel value="Date" styleClass="r-label"/>
-                        <p:outputLabel value="#{supplierBean.readSupplier.date}" styleClass="r-content"/>
-                    </p:column>
-                    <p:column>
-                        <p:outputLabel value="Count" styleClass="r-label"/>
-                        <p:outputLabel value="#{supplierBean.readSupplier.count}" styleClass="r-content"/>
-                    </p:column>
-                    <p:column>
-                        <p:outputLabel value="Location" styleClass="r-label"/>
-                        <p:outputLabel value="#{supplierBean.readSupplier.location}" styleClass="r-content"/>
-                    </p:column>
-                </p:panelGrid>
-            </p:dialog>
+            <h:form>
+                <p:inputNumber id="search_box" placeholder="Find Supplier" title="Search by ID"
+                               value="#{supplierBean.readSupplier.id}" modifyValueOnWheel="false"/>
+                <p:commandButton icon="pi pi-search" action="#{supplierBean.read()}" styleClass="ui-button-raised"
+                                 update="search_box messages" style="display: inline"/>
+                <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
+                    <p:panelGrid columns="4" columnClasses="r-col1, r-col2, r-col3, r-col4">
+                        <p:column>
+                            <p:outputLabel value="Name" styleClass="r-label"/>
+                            <p:outputLabel value="#{supplierBean.readSupplier.name}" styleClass="r-content"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Date" styleClass="r-label"/>
+                            <p:outputLabel value="#{supplierBean.readSupplier.date}" styleClass="r-content"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Count" styleClass="r-label"/>
+                            <p:outputLabel value="#{supplierBean.readSupplier.count}" styleClass="r-content"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Location" styleClass="r-label"/>
+                            <p:outputLabel value="#{supplierBean.readSupplier.location}" styleClass="r-content"/>
+                        </p:column>
+                    </p:panelGrid>
+                </p:dialog>
+            </h:form>
         </p:toolbarGroup>
     </ui:define>
 
@@ -100,14 +106,17 @@
                 <p:cellEditor>
                     <f:facet name="output"><p:outputLabel value="#{supplier.name}"/></f:facet>
                     <f:facet name="input">
-                        <p:inputText value="#{supplier.name}" maxlength="30"/>
+                        <p:inputText value="#{supplier.name}" maxlength="30"
+                                     validator="#{supplierBean.validateRequired}"/>
                     </f:facet>
                 </p:cellEditor>
             </p:column>
             <p:column styleClass="dateCol" headerText="Date" sortBy="#{supplier.date}">
                 <p:cellEditor>
                     <f:facet name="output"><p:outputLabel value="#{supplier.convertDate()}"/></f:facet>
-                    <f:facet name="input"><p:datePicker value="#{supplier.date}"/></f:facet>
+                    <f:facet name="input">
+                        <p:datePicker value="#{supplier.date}" validator="#{supplierBean.validateRequired}"/>
+                    </f:facet>
                 </p:cellEditor>
             </p:column>
             <p:column headerText="Count" sortBy="#{supplier.count}">
@@ -122,7 +131,8 @@
                 <p:cellEditor>
                     <f:facet name="output"><p:outputLabel value="#{supplier.location}"/></f:facet>
                     <f:facet name="input">
-                        <p:inputText value="#{supplier.location}" maxlength="30"/>
+                        <p:inputText value="#{supplier.location}" maxlength="30"
+                                     validator="#{supplierBean.validateRequired}"/>
                     </f:facet>
                 </p:cellEditor>
             </p:column>

@@ -134,7 +134,7 @@ public class SupplierDAO implements DAO<Supplier> {
             preparedStatement.setInt(1, supplier.getId());
             preparedStatement.setString(2, supplier.getName());
             preparedStatement.setDate(3, Date.valueOf(supplier.getDate()));
-            preparedStatement.setInt(4, supplier.getCount());
+            preparedStatement.setInt(4, supplier.getCount() == null ? 0 : supplier.getCount());
             preparedStatement.setString(5, supplier.getLocation());
             preparedStatement.setInt(6, (Integer) id);
             return preparedStatement.executeUpdate();

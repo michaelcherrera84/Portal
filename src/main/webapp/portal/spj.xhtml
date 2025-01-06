@@ -1,4 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:f="jakarta.faces.core"
                 template="/resources/templates/tables-template.xhtml"
@@ -34,18 +35,24 @@
     </ui:define>
 
     <ui:define name="add_button">
-        <p:commandButton action="#{spjBean.createReset()}" value="Add SPJ" icon="pi pi-plus-circle"
-                         oncomplete="PF('create').show()" styleClass="ui-button-outlined ui-button-raised"/>
+        <p:commandButton value="Add SPJ" icon="pi pi-plus-circle" oncomplete="PF('create').show()"
+                         styleClass="ui-button-outlined ui-button-raised">
+            <p:ajax update="create" resetValues="true"/>
+        </p:commandButton>
         <p:dialog id="create" widgetVar="create" header="Add SPJ (numbers only)" modal="true">
             <p:panelGrid columns="2" columnClasses="c-col1, c-col2">
                 <p:outputLabel value="s-ID" styleClass="c-label"/>
-                <p:inputNumber value="#{spjBean.createSPJ.sid}" modifyValueOnWheel="false"/>
+                <p:inputNumber value="#{spjBean.createSPJ.sid}" modifyValueOnWheel="false"
+                               validator="#{spjBean.validateRequired}"/>
                 <p:outputLabel value="p-ID" styleClass="c-label"/>
-                <p:inputNumber value="#{spjBean.createSPJ.pid}" modifyValueOnWheel="false"/>
+                <p:inputNumber value="#{spjBean.createSPJ.pid}" modifyValueOnWheel="false"
+                               validator="#{spjBean.validateRequired}"/>
                 <p:outputLabel value="j-ID" styleClass="c-label"/>
-                <p:inputNumber value="#{spjBean.createSPJ.jid}" modifyValueOnWheel="false"/>
+                <p:inputNumber value="#{spjBean.createSPJ.jid}" modifyValueOnWheel="false"
+                               validator="#{spjBean.validateRequired}"/>
                 <p:outputLabel value="Quantity" styleClass="c-label"/>
-                <p:inputNumber value="#{spjBean.createSPJ.qty}" modifyValueOnWheel="false"/>
+                <p:inputNumber value="#{spjBean.createSPJ.qty}" modifyValueOnWheel="false"
+                               validator="#{spjBean.validateRequired}"/>
             </p:panelGrid>
             <p:commandButton id="insert" value="Insert SPJ" action="#{spjBean.create()}"
                              update="datatable messages" styleClass="c-button"/>
@@ -54,30 +61,32 @@
 
     <ui:define name="search">
         <p:toolbarGroup align="right">
-            <p:inputText id="search_box" placeholder="Find SPJ (ex. s-1, p-1, j-1)" title="Search by IDs"
-                         value="#{spjBean.readID}" immediate="true"/>
-            <p:commandButton icon="pi pi-search" action="#{spjBean.read()}" styleClass="ui-button-raised"
-                             update="search_box messages" style="display: inline"/>
-            <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
-                <p:panelGrid columns="4" columnClasses="r-col1, r-col2, r-col3, r-col4">
-                    <p:column>
-                        <p:outputLabel value="s-ID" styleClass="r-label"/>
-                        <p:outputLabel styleClass="r-content">s-#{spjBean.readSPJ.sid}</p:outputLabel>
-                    </p:column>
-                    <p:column>
-                        <p:outputLabel value="p-ID" styleClass="r-label"/>
-                        <p:outputLabel styleClass="r-content">p-#{spjBean.readSPJ.pid}</p:outputLabel>
-                    </p:column>
-                    <p:column>
-                        <p:outputLabel value="j-ID" styleClass="r-label"/>
-                        <p:outputLabel styleClass="r-content">j-#{spjBean.readSPJ.jid}</p:outputLabel>
-                    </p:column>
-                    <p:column>
-                        <p:outputLabel value="Quantity" styleClass="r-label"/>
-                        <p:outputLabel value="#{spjBean.readSPJ.qty}" styleClass="r-content"/>
-                    </p:column>
-                </p:panelGrid>
-            </p:dialog>
+            <h:form>
+                <p:inputText id="search_box" placeholder="Find SPJ (ex. s-1, p-1, j-1)" title="Search by IDs"
+                             value="#{spjBean.readID}"/>
+                <p:commandButton icon="pi pi-search" action="#{spjBean.read()}" styleClass="ui-button-raised"
+                                 update="search_box messages" style="display: inline"/>
+                <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
+                    <p:panelGrid columns="4" columnClasses="r-col1, r-col2, r-col3, r-col4">
+                        <p:column>
+                            <p:outputLabel value="s-ID" styleClass="r-label"/>
+                            <p:outputLabel styleClass="r-content">s-#{spjBean.readSPJ.sid}</p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="p-ID" styleClass="r-label"/>
+                            <p:outputLabel styleClass="r-content">p-#{spjBean.readSPJ.pid}</p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="j-ID" styleClass="r-label"/>
+                            <p:outputLabel styleClass="r-content">j-#{spjBean.readSPJ.jid}</p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Quantity" styleClass="r-label"/>
+                            <p:outputLabel value="#{spjBean.readSPJ.qty}" styleClass="r-content"/>
+                        </p:column>
+                    </p:panelGrid>
+                </p:dialog>
+            </h:form>
         </p:toolbarGroup>
     </ui:define>
 
@@ -91,7 +100,9 @@
                     <f:facet name="output"><p:outputLabel>s-#{spj.sid}</p:outputLabel></f:facet>
                     <f:facet name="input">
                         <!--suppress ELValidationInspection -->
-                        <p:inputNumber value="#{spj.sid}" modifyValueOnWheel="false" validator="#{spjBean.getIDs(i)}"/>
+                        <p:inputNumber value="#{spj.sid}" modifyValueOnWheel="false"
+                                       validator="#{spjBean.validateID(i)}" required="true"
+                                       requiredMessage="All fields are required."/>
                     </f:facet>
                 </p:cellEditor>
             </p:column>
@@ -99,7 +110,8 @@
                 <p:cellEditor>
                     <f:facet name="output"><p:outputLabel>p-#{spj.pid}</p:outputLabel></f:facet>
                     <f:facet name="input">
-                        <p:inputNumber value="#{spj.pid}" modifyValueOnWheel="false"/>
+                        <p:inputNumber value="#{spj.pid}" modifyValueOnWheel="false"
+                                       validator="#{spjBean.validateRequired}"/>
                     </f:facet>
                 </p:cellEditor>
             </p:column>
@@ -107,7 +119,8 @@
                 <p:cellEditor>
                     <f:facet name="output"><p:outputLabel>j-#{spj.jid}</p:outputLabel></f:facet>
                     <f:facet name="input">
-                        <p:inputNumber value="#{spj.jid}" modifyValueOnWheel="false"/>
+                        <p:inputNumber value="#{spj.jid}" modifyValueOnWheel="false"
+                                       validator="#{spjBean.validateRequired}"/>
                     </f:facet>
                 </p:cellEditor>
             </p:column>
@@ -115,7 +128,8 @@
                 <p:cellEditor>
                     <f:facet name="output"><p:outputLabel value="#{spj.qty}"/></f:facet>
                     <f:facet name="input">
-                        <p:inputNumber value="#{spj.qty}" modifyValueOnWheel="false"/>
+                        <p:inputNumber value="#{spj.qty}" modifyValueOnWheel="false"
+                                       validator="#{spjBean.validateRequired}"/>
                     </f:facet>
                 </p:cellEditor>
             </p:column>

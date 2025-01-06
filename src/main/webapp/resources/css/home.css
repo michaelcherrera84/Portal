@@ -1,0 +1,123 @@
+.ui-sticky {
+    top: 0 !important;
+}
+
+.ui-menu.ui-menu-dynamic {z-index: 100000 !important;}
+
+h1 {
+    margin-bottom: 20px;
+    padding: 5px 0;
+    border-radius: 5px;
+}
+
+.ui-inputfield {
+    display: block;
+    margin: 5px 0 15px;
+    text-align: center;
+}
+
+.ui-dialog-titlebar {
+    padding: 0 10px !important;
+    background-color: #2196f3 !important;
+}
+
+.ui-dialog-titlebar-icon:focus {box-shadow: none !important;}
+
+.banner {
+    padding: 60px 0 40px;
+    text-align: center;
+    background-color: #495057;
+}
+
+.title {
+    font-family: "Courier New", monospace;
+    font-size: 40pt;
+    color: white;
+    text-shadow: 3px 1px 3px #607d8b;
+}
+
+.info {
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    line-height: 1.5em;
+    padding: 45px 100px;
+    text-align: justify;
+    color: #607d8b;
+    background: linear-gradient(170deg, rgba(96, 125, 139, 0.15), white);
+}
+
+.info p {
+    position: relative;
+    margin-top: -5px;
+    padding: 10px 30px 20px;
+    border-radius: 7px;
+    background: white;
+    box-shadow: 10px 10px 18px rgba(96, 125, 139, 0.50);
+}
+
+.content {
+    display: flex;
+    width: 100%;
+}
+
+.flex {flex: 1}
+
+.box1, .box2, .box3 {height: 300px;}
+
+.box1 {background-color: #0288d1;}
+
+.box2 {background-color: #689f38;}
+
+.box3 {background-color: #9c27b0;}
+
+footer {
+    position: relative;
+    height: 250px;
+    color: #212529;
+    border: none;
+    background-color: #fbc02d;
+}
+
+.f1, .f2, .f3 {text-align: left;}
+
+.f1 {padding: 30px;}
+
+.f2, .f3 {padding: 35px 0 0 50px;}
+
+.f1 h2 {
+    font-family: "Courier New", monospace;
+    line-height: 2.35em !important;
+}
+
+.f3 h3 {line-height: 2em !important;}
+
+.block {
+    line-height: 2.25em;
+    display: block;
+}
+
+.smaller {font-size: 0.8em !important;}
+
+.m-t1 {margin-top: 30px !important;}
+
+.facebook {background-color: #0866ff !important;}
+
+.instagram {
+    background: #d6249f !important;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%) !important;
+}
+
+.twitter-x {background-color: black !important;}
+
+.border-white { border-color: white !important;}
+
+.f-col-title {
+    line-height: 2em !important;
+    text-decoration: underline !important;
+}
+
+.footer-link {
+    line-height: 2em;
+    text-decoration: none !important;
+    color: #212529 !important;
+}

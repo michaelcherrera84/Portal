@@ -3,84 +3,21 @@
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="jakarta.faces.facelets">
 <h:head>
     <title>Home</title>
     <h:outputStylesheet library="css" name="styles.css"/>
+    <h:outputStylesheet library="css" name="home.css"/>
+    <ui:include src="resources/head.xhtml"/>
     <!--suppress CssUnusedSymbol -->
     <style>
-        .ui-sticky {
-            top: 0 !important;
-        }
-
-        .ui-menu.ui-menu-dynamic {z-index: 100000 !important;}
-
-        h1 {
-            border-radius: 5px;
-            margin-bottom: 20px;
-            padding: 5px 0;
-        }
-
-        .ui-inputfield {
-            display: block;
-            margin: 5px 0 15px;
-            text-align: center;
-        }
-
-        .ui-dialog-titlebar {
-            background-color: #2196f3 !important;
-            padding: 0 10px !important;
-        }
-
-        .ui-dialog-titlebar-icon:focus {box-shadow: none !important;}
-
-        .banner {
-            background-color: #495057;
-            text-align: center;
-            padding: 60px 0 40px;
-        }
-
-        .title {
-            font-family: "Courier New", monospace;
-            color: white;
-            font-size: 40pt;
-            text-shadow: 3px 1px 3px #607d8b;
-        }
-
-        .info {
-            padding: 45px 100px;
-            font-family: "Courier New", monospace;
-            font-weight: bold;
-            text-align: justify;
-            color: #607d8b;
-            line-height: 1.5em;
-            /*text-shadow: 20px 20px 5px rgba(96, 125, 139, 0.15);*/
-        }
-        .info p {
-            box-shadow: 10px 10px 5px rgba(96, 125, 139, 0.50);
+        .pi-twitter:before {
+            content: "\1D54F";
             position: relative;
-            padding: 10px 20px;
-        }
-
-        .content {
-            display: flex;
-            width: 100%;
-        }
-
-        .box1, .box2, .box3 {height: 300px;}
-
-        .box1 {background-color: #2196f3; flex: 1;}
-
-        .box2 {background-color: #689f38; flex: 1;}
-
-        .box3 {background-color: #9c27b0; flex: 1;}
-
-        footer {
-            position: relative;
-            height: 300px;
-            background-color: #fbc02d;
-            border: none;
-            color: #212529;
+            font-size: 1.15em;
+            top: -3px;
+            right: -1px;
         }
     </style>
 </h:head>
@@ -125,18 +62,48 @@
             a reality.</p>
     </div>
     <div class="content">
-        <div class="box1">
+        <div class="box1 flex">
 
         </div>
-        <div class="box2">
+        <div class="box2 flex">
 
         </div>
-        <div class="box3">
+        <div class="box3 flex">
 
         </div>
     </div>
     <footer>
-
+        <div class="content">
+            <div class="flex f1">
+                <h2>ASDV Construction</h2>
+                <p:outputLabel styleClass="block smaller">Copyright &#169; 2025 Michael C. Herrera</p:outputLabel>
+                <p:outputLabel styleClass="block smaller">No Rights Reserved</p:outputLabel>
+                <p:button icon="pi pi-facebook"
+                          styleClass="rounded-button mr-2 m-t1 border-white facebook ui-button-raised"/>
+                <p:button icon="pi pi-instagram"
+                          styleClass="rounded-button mr-2 m-t1 border-white instagram ui-button-raised"/>
+                <p:button icon="pi pi-twitter"
+                          styleClass="rounded-button mr-2 m-t1 border-white twitter-x ui-button-raised"/>
+            </div>
+            <div class="flex f2">
+                <h:form>
+                    <h3><p:outputLabel value="Site Map" styleClass="f-col-title"/></h3>
+                    <p:commandLink value="Page1" styleClass="footer-link"/><br/>
+                    <p:commandLink value="Page2" styleClass="footer-link"/><br/>
+                    <p:commandLink value="Page3" styleClass="footer-link"/><br/>
+                    <p:commandLink value="Page4" styleClass="footer-link"/>
+                </h:form>
+            </div>
+            <div class="flex f3">
+                <h:form>
+                    <h3><p:outputLabel value="Company" styleClass="f-col-title"/></h3>
+                    <p:commandLink value="Contact Us" styleClass="footer-link"/><br/>
+                    <p:commandLink value="Privacy Policy" styleClass="footer-link"/><br/>
+                    <p:commandLink value="Terms &amp; Condistion" styleClass="footer-link"/><br/>
+                    <p:commandLink value="Career" styleClass="footer-link"/>
+                </h:form>
+            </div>
+        </div>
     </footer>
 </h:body>
 </html>

@@ -6,6 +6,7 @@ import com.asdvconstruction.portal.util.Utilities;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.validator.ValidatorException;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -129,22 +130,40 @@ public class PartBean implements Serializable {
     @SuppressWarnings("unused")
     public void validateID(FacesContext facesContext, UIComponent uiComponent, Object o) {
 
+        if (o == null)
+            throw new ValidatorException(
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "The ID field is required.", null));
+
         for (Part part : parts)
             if (((InputNumber) uiComponent).getValue() == part.getId())
                 updatePart = new Part(part);
     }
 
     /**
+     * Validate required fields.
+     *
+     * @param facesContext per-request state information related to the processing of the Jakarta Faces request, and the
+     *                     rendering of the corresponding response
+     * @param uiComponent  user interface component that will contain the value to be validated
+     * @param o            value to be validated
+     */
+    @SuppressWarnings("unused")
+    public void validateRequired(FacesContext facesContext, UIComponent uiComponent, Object o) {
+
+        if (o == null)
+            throw new ValidatorException(
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "All fields are required", null));
+        else if (o instanceof String && ((String) o).isEmpty())
+            throw new ValidatorException(
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "All fields are required", null));
+    }
+
+    /**
      * Insert a new part.
      */
     public void create() {
-
-        // If required columns are empty, display an error message and update the form.
-        if (createPart.getName().isEmpty() || createPart.getLocation().isEmpty()) {
-            Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Part not added.",
-                    "Name and location cannot be empty.");
-            return;
-        }
 
         // Add the tuple and update the list.
         try {
@@ -156,25 +175,19 @@ public class PartBean implements Serializable {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
-        // Reset the form.
         createPart = new Part();
-        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
         PrimeFaces.current().executeScript("PF('create').hide()");
-    }
-
-    /**
-     * Reset the create dialog.
-     */
-    public void createReset() {
-
-        createPart = new Part();
-        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
     }
 
     /**
      * Find a part by part ID.
      */
     public void read() {
+
+        if (readPart.getId() == null) {
+            Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Invalid search parameter.", null);
+            return;
+        }
 
         try {
             readPart = PART_DAO.read(readPart.getId());
@@ -216,6 +229,7 @@ public class PartBean implements Serializable {
 
         try {
             PART_DAO.update(updatePart.getId(), part);
+            parts = PART_DAO.readAll();
         } catch (SQLException e) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Part not updated.",
                     "An error occurred while attempted to update the part.");

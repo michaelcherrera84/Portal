@@ -6,6 +6,7 @@ import com.asdvconstruction.portal.util.Utilities;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.validator.ValidatorException;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -30,7 +31,7 @@ import java.util.logging.Logger;
 public class SupplierBean implements Serializable {
 
     /**
-     * The SPJBean is a CDI managed bean responsible for handling user operations related to the spj. xhtml page and the
+     * The SPJBean is a CDI managed bean responsible for handling user operations related to the spj.xhtml page and the
      * spj table.
      */
     @Inject
@@ -129,23 +130,40 @@ public class SupplierBean implements Serializable {
     @SuppressWarnings("unused")
     public void validateID(FacesContext facesContext, UIComponent uiComponent, Object o) {
 
+        if (o == null)
+            throw new ValidatorException(
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "The ID field is required.", null));
+
         for (Supplier supplier : suppliers)
             if (((InputNumber) uiComponent).getValue() == supplier.getId())
                 updateSupplier = new Supplier(supplier);
     }
 
     /**
+     * Validate required fields.
+     *
+     * @param facesContext per-request state information related to the processing of the Jakarta Faces request, and the
+     *                     rendering of the corresponding response
+     * @param uiComponent  user interface component that will contain the value to be validated
+     * @param o            value to be validated
+     */
+    @SuppressWarnings("unused")
+    public void validateRequired(FacesContext facesContext, UIComponent uiComponent, Object o) {
+
+        if (o == null)
+            throw new ValidatorException(
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "Name, Date, and Location fields are required", null));
+        else if (o instanceof String && ((String) o).isEmpty())
+            throw new ValidatorException(
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "Name, Date, and Location fields are required", null));
+    }
+
+    /**
      * Insert a new supplier.
      */
     public void create() {
-
-        // If required columns are empty, display an error message and update the form.
-        if (createSupplier.getName().isEmpty() || createSupplier.getDate() == null ||
-                createSupplier.getLocation().isEmpty()) {
-            Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Supplier not added.",
-                    "Name, date, and location cannot be empty.");
-            return;
-        }
 
         // Add the tuple and update the list.
         try {
@@ -157,25 +175,19 @@ public class SupplierBean implements Serializable {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
-        // Reset the form.
-        createSupplier = new Supplier();
-        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
         PrimeFaces.current().executeScript("PF('create').hide()");
-    }
-
-    /**
-     * Reset the create dialog.
-     */
-    public void createReset() {
-
         createSupplier = new Supplier();
-        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
     }
 
     /**
      * Find a supplier by supplier ID.
      */
     public void read() {
+
+        if (readSupplier.getId() == null) {
+            Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Invalid search parameter.", null);
+            return;
+        }
 
         try {
             readSupplier = SUPPLIER_DAO.read(readSupplier.getId());
@@ -217,6 +229,7 @@ public class SupplierBean implements Serializable {
 
         try {
             SUPPLIER_DAO.update(updateSupplier.getId(), supplier);
+            suppliers = SUPPLIER_DAO.readAll();
         } catch (SQLException e) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Supplier not updated.",
                     "An error occurred while attempted to update the supplier.");

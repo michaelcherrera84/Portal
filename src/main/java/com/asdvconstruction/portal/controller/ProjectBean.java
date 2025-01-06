@@ -6,6 +6,7 @@ import com.asdvconstruction.portal.util.Utilities;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.validator.ValidatorException;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -129,22 +130,40 @@ public class ProjectBean implements Serializable {
     @SuppressWarnings("unused")
     public void validateID(FacesContext facesContext, UIComponent uiComponent, Object o) {
 
+        if (o == null)
+            throw new ValidatorException(
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "The ID field is required.", null));
+
         for (Project project : projects)
             if (((InputNumber) uiComponent).getValue() == project.getId())
                 updateProject = new Project(project);
     }
 
     /**
+     * Validate required fields.
+     *
+     * @param facesContext per-request state information related to the processing of the Jakarta Faces request, and the
+     *                     rendering of the corresponding response
+     * @param uiComponent  user interface component that will contain the value to be validated
+     * @param o            value to be validated
+     */
+    @SuppressWarnings("unused")
+    public void validateRequired(FacesContext facesContext, UIComponent uiComponent, Object o) {
+
+        if (o == null)
+            throw new ValidatorException(
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "All fields are required", null));
+        else if (o instanceof String && ((String) o).isEmpty())
+            throw new ValidatorException(
+                    new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "All fields are required", null));
+    }
+
+    /**
      * Insert a new project.
      */
     public void create() {
-
-        // If required columns are empty, display an error message and update the form.
-        if (createProject.getName().isEmpty() || createProject.getLocation().isEmpty()) {
-            Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Project not added.",
-                    "Name and location cannot be empty.");
-            return;
-        }
 
         // Add the tuple and update the list.
         try {
@@ -156,25 +175,19 @@ public class ProjectBean implements Serializable {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
-        // Reset the form.
         createProject = new Project();
-        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
         PrimeFaces.current().executeScript("PF('create').hide()");
-    }
-
-    /**
-     * Reset the create dialog.
-     */
-    public void createReset() {
-
-        createProject = new Project();
-        PrimeFaces.current().ajax().update(Utilities.findComponent("create"));
     }
 
     /**
      * Find a project by project ID.
      */
     public void read() {
+
+        if (readProject.getId() == null) {
+            Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Invalid search parameter.", null);
+            return;
+        }
 
         try {
             readProject = PROJECT_DAO.read(readProject.getId());
@@ -216,6 +229,7 @@ public class ProjectBean implements Serializable {
 
         try {
             PROJECT_DAO.update(updateProject.getId(), project);
+            projects = PROJECT_DAO.readAll();
         } catch (SQLException e) {
             Utilities.addMessage(FacesMessage.SEVERITY_ERROR, "Project not updated.",
                     "An error occurred while attempted to update the project.");
