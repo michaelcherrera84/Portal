@@ -83,7 +83,7 @@ Once the application is running, you can:
 ```
 
 ## License
-This project is open-source and available under the [MIT License](LICENSE). Feel free to use, modify, and distribute it as 
+This project is open-source and available under the [MIT License](LICENSE.md). Feel free to use, modify, and distribute it as 
 needed.
 
 
