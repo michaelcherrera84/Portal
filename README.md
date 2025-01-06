@@ -83,7 +83,8 @@ Once the application is running, you can:
 ```
 
 ## License
-This project is open-source and available under the [MIT License](https://github.com/michaelcherrera84/mit-license.git). Feel free to use, modify, and distribute it as needed.
+This project is open-source and available under the [MIT License](LICENSE). Feel free to use, modify, and distribute it as 
+needed.
 
 
 ## Contributing
