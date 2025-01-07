@@ -5,8 +5,8 @@ This project is licensed under the MIT License.
 Copyright &copy; 2025 Michael C. Herrera
 
 ### Third-party Libraries
-- **PrimeFaces**: Licensed under the MIT License. Copyright (c) 2009-2021 PrimeTek. See [PrimeFaces GitHub]
-  (https://github.com/primefaces/primefaces) 
+- **PrimeFaces**: Licensed under the MIT License.<br>
+Copyright (c) 2009-2021 PrimeTek.<br>See [PrimeFaces GitHub](https://github.com/primefaces/primefaces) 
   for more details.
 <br><br>
 

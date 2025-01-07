@@ -10,15 +10,19 @@
     <ui:define name="style">
         <!--suppress CssUnusedSymbol -->
         <style>
+            /* yellow background color */
             body {background-color: rgba(251, 192, 45, 0.04);}
 
+            /* yellow table border */
             .wrapper {border: 3px double #fbc02d;}
 
+            /* yellow table header */
             th {
                 color: #212529 !important;
                 background-color: #fbc02d !important;
             }
 
+            /* yellow table footer */
             footer {
                 color: #212529;
                 background-color: #fbc02d;
@@ -26,7 +30,9 @@
         </style>
     </ui:define>
 
+    <!-- header bar logo -->
     <ui:define name="logo">
+        <!-- yellow logo specific to the spj.xhtml -->
         <p:link title="Employee - Home" href="./index.xhtml">
             <p:graphicImage library="images" name="logo_horizontal_yellow.png" height="45px"/>
         </p:link>
@@ -34,9 +40,12 @@
         <i class="pi pi-bars mr-2" style="color: #fbc02d"/>
     </ui:define>
 
+    <!-- add botton and popup dialog for adding records to the database -->
     <ui:define name="add_button">
+        <!-- The commandButton displays the dialog oncomplete and after the AJAX update. -->
         <p:commandButton value="Add SPJ" icon="pi pi-plus-circle" oncomplete="PF('create').show()"
                          styleClass="ui-button-outlined ui-button-raised">
+            <!-- AJAX updates the dialog components to ensure no previous data is present for prior records. -->
             <p:ajax update="create" resetValues="true"/>
         </p:commandButton>
         <p:dialog id="create" widgetVar="create" header="Add SPJ (numbers only)" modal="true">
@@ -54,18 +63,24 @@
                 <p:inputNumber value="#{spjBean.createSPJ.qty}" modifyValueOnWheel="false"
                                validator="#{spjBean.validateRequired}"/>
             </p:panelGrid>
+            <!-- The commandButton updates the main datatable after record insertion to display the added record. -->
             <p:commandButton id="insert" value="Insert SPJ" action="#{spjBean.create()}"
                              update="datatable messages" styleClass="c-button"/>
         </p:dialog>
     </ui:define>
 
+    <!-- search box and popup dialog to display search results -->
     <ui:define name="search">
         <p:toolbarGroup align="right">
             <h:form>
+                <!-- The search box accepts a string of IDs, each separated by a comma. -->
                 <p:inputText id="search_box" placeholder="Find SPJ (ex. s-1, p-1, j-1)" title="Search by IDs"
                              value="#{spjBean.readID}"/>
+                <!-- The read() method called by the commandButton uses the supplied IDs to search for a matching
+                record in the database. -->
                 <p:commandButton icon="pi pi-search" action="#{spjBean.read()}" styleClass="ui-button-raised"
                                  update="search_box messages" style="display: inline"/>
+                <!-- If a matching record is found, the dialog is displayed containing the requested record. -->
                 <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
                     <p:panelGrid columns="4" columnClasses="r-col1, r-col2, r-col3, r-col4">
                         <p:column>
@@ -90,6 +105,7 @@
         </p:toolbarGroup>
     </ui:define>
 
+    <!-- main datatable containing the records of the spj table -->
     <ui:define name="table">
         <p:dataTable id="spj_table" editable="true" value="#{spjBean.SPJs}" var="spj"
                      showGridlines="true" rowIndexVar="i" reflow="true" paginator="true"
@@ -99,6 +115,9 @@
                 <p:cellEditor>
                     <f:facet name="output"><p:outputLabel>s-#{spj.sid}</p:outputLabel></f:facet>
                     <f:facet name="input">
+                        <!-- The id validator checks for an empty field and also stores the current value of the ID
+                        field before update. This perserves the id for the SQL WHERE clause in the event of an id
+                        update. -->
                         <!--suppress ELValidationInspection -->
                         <p:inputNumber value="#{spj.sid}" modifyValueOnWheel="false"
                                        validator="#{spjBean.validateID(i)}" required="true"
@@ -134,10 +153,12 @@
                 </p:cellEditor>
             </p:column>
             <p:column styleClass="updateCol"><p:rowEditor styleClass="row-editor"/>
+                <!-- The showDeleteDialog(SPJ) method updates the contents of the dialog based on the spj. -->
                 <p:commandButton process="@this" action="#{spjBean.showDeleteDialog(spj)}"
                                  styleClass="ui-button-raised ui-button-danger delete-button" icon="pi pi-trash"/>
                 <p:dialog id="confirm" widgetVar="delete" header="Delete SPJ" modal="true" closeOnEscape="true"
                           styleClass="left">
+                    <!-- The deleteConfirm() method retuns the content of the dialog. -->
                     <p:outputLabel value="#{spjBean.deleteConfirm()}" escape="false"/>
                     <div class="confirm-buttons">
                         <p:commandButton value="Cancel" styleClass="ui-button-flat ui-button-plain"
@@ -149,6 +170,8 @@
                     </div>
                 </p:dialog>
             </p:column>
+            <!-- AJAX handles the rowEdit events. The var 'i' corresponds to the datatable row being edited which
+            corresponds to the same element in the list of suppliers. -->
             <!--suppress ELValidationInspection -->
             <p:ajax event="rowEdit" listener="#{spjBean.update(i)}" update="messages spj_table"/>
             <p:ajax event="rowEditCancel" listener="#{spjBean.updateCancel}" update="messages spj_table"/>
