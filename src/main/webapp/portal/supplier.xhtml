@@ -10,15 +10,19 @@
     <ui:define name="style">
         <!--suppress CssUnusedSymbol -->
         <style>
+            /* blue background color */
             body {background-color: rgba(2, 136, 209, 0.04)}
 
+            /* blue table border */
             .wrapper {border: 3px double #0288d1;}
 
+            /* blue table header */
             th {
                 color: white !important;
                 background-color: #0288d1 !important;
             }
 
+            /* blue table footer */
             footer {
                 color: white;
                 background-color: #0288d1;
@@ -26,7 +30,9 @@
         </style>
     </ui:define>
 
+    <!-- header bar logo -->
     <ui:define name="logo">
+        <!-- blue logo specific to the supplier.xhtml -->
         <p:link title="Employee - Home" href="./index.xhtml">
             <p:graphicImage library="images" name="logo_horizontal_blue.png" height="45px"/>
         </p:link>
@@ -34,9 +40,12 @@
         <i class="pi pi-bars mr-2" style="color: #0288d1"/>
     </ui:define>
 
+    <!-- add botton and popup dialog for adding records to the database -->
     <ui:define name="add_button">
+        <!-- The commandButton displays the dialog oncomplete and after the AJAX update. -->
         <p:commandButton value="Add Supplier" icon="pi pi-plus-circle" oncomplete="PF('create').show()"
                          styleClass="ui-button-outlined ui-button-raised">
+            <!-- AJAX updates the dialog components to ensure no previous data is present for prior records. -->
             <p:ajax update="create" resetValues="true"/>
         </p:commandButton>
         <p:dialog id="create" widgetVar="create" header="Add Supplier" modal="true">
@@ -52,18 +61,24 @@
                 <p:inputText value="#{supplierBean.createSupplier.location}" maxlength="30"
                              validator="#{supplierBean.validateRequired}"/>
             </p:panelGrid>
+            <!-- The commandButton updates the main datatable after record insertion to display the added record. -->
             <p:commandButton id="insert" value="Insert Supplier" action="#{supplierBean.create()}"
                              update="datatable messages" styleClass="c-button"/>
         </p:dialog>
     </ui:define>
 
+    <!-- search box and popup dialog to display search results -->
     <ui:define name="search">
         <p:toolbarGroup align="right">
             <h:form>
+                <!-- The search box sets the id field of a supplier. -->
                 <p:inputNumber id="search_box" placeholder="Find Supplier" title="Search by ID"
                                value="#{supplierBean.readSupplier.id}" modifyValueOnWheel="false"/>
+                <!-- The read() method called by the commandButton uses the supplied id to search for a matching
+                record in the database. -->
                 <p:commandButton icon="pi pi-search" action="#{supplierBean.read()}" styleClass="ui-button-raised"
                                  update="search_box messages" style="display: inline"/>
+                <!-- If a matching record is found, the dialog is displayed containing the requested record. -->
                 <p:dialog id="search" widgetVar="search" header="Search Result" modal="true" closeOnEscape="true">
                     <p:panelGrid columns="4" columnClasses="r-col1, r-col2, r-col3, r-col4">
                         <p:column>
@@ -88,6 +103,7 @@
         </p:toolbarGroup>
     </ui:define>
 
+    <!-- main datatable containing the records of the supplier table -->
     <ui:define name="table">
         <p:dataTable id="supplier_table" editable="true" value="#{supplierBean.suppliers}" var="supplier"
                      showGridlines="true" rowIndexVar="i" reflow="true" paginator="true"
@@ -97,6 +113,9 @@
                 <p:cellEditor>
                     <f:facet name="output"><p:outputLabel value="#{supplier.id}"/></f:facet>
                     <f:facet name="input">
+                        <!-- The id validator checks for an empty field and also stores the current value of the
+                        field before update. This perserves the id for the SQL WHERE clause in the event of an id
+                        update. -->
                         <p:inputNumber value="#{supplier.id}" validator="#{supplierBean.validateID}"
                                        modifyValueOnWheel="false"/>
                     </f:facet>
@@ -137,10 +156,14 @@
                 </p:cellEditor>
             </p:column>
             <p:column styleClass="updateCol"><p:rowEditor styleClass="row-editor"/>
+                <!-- The showDeleteDialog(Supplier) method updates the contents of the dialog based on the supplier
+                to include the number of records that will be removed from the SPJ table as a result of cascade on
+                delete. -->
                 <p:commandButton process="@this" action="#{supplierBean.showDeleteDialog(supplier)}"
                                  styleClass="ui-button-raised ui-button-danger delete-button" icon="pi pi-trash"/>
                 <p:dialog id="confirm" widgetVar="delete" header="Delete Supplier" modal="true" closeOnEscape="true"
                           styleClass="left">
+                    <!-- The deleteConfirm() method retuns the content of the dialog. -->
                     <p:outputLabel value="#{supplierBean.deleteConfirm()}" escape="false"/>
                     <div class="confirm-buttons">
                         <p:commandButton value="Cancel" styleClass="ui-button-flat ui-button-plain"
@@ -152,6 +175,8 @@
                     </div>
                 </p:dialog>
             </p:column>
+            <!-- AJAX handles the rowEdit events. The var 'i' corresponds to the datatable row being edited which
+            corresponds to the same element in the list of suppliers. -->
             <!--suppress ELValidationInspection -->
             <p:ajax event="rowEdit" listener="#{supplierBean.update(i)}" update="messages supplier_table"/>
             <p:ajax event="rowEditCancel" listener="#{supplierBean.updateCancel}" update="messages supplier_table"/>
