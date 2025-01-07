@@ -88,8 +88,8 @@ needed.
 
 
 ## Contributing
-While this project is for demonstration and educational purposes only, feedback, improvements, and bug fixes are 
-welcome! If you'd like to contribute, please fork the repository and submit a pull request.
+While this project is primarily for demonstration and educational purposes, feedback, improvements, and bug fixes 
+are welcome! If you'd like to contribute, please fork the repository and submit a pull request.
 
 ## Acknowledgements
 - PrimeFaces for the rich UI components
