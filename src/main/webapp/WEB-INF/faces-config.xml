@@ -4,6 +4,7 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_0.xsd">
 
+    <!-- Access to portal directory requires login -->
     <navigation-rule>
         <from-view-id>index.xhtml</from-view-id>
         <navigation-case>
@@ -12,6 +13,7 @@
         </navigation-case>
     </navigation-rule>
 
+    <!-- No direct browser access to the resources directory -->
     <navigation-rule>
         <from-view-id>index.xhtml</from-view-id>
         <navigation-case>

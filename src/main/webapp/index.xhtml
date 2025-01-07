@@ -12,6 +12,7 @@
     <ui:include src="resources/head.xhtml"/>
     <!--suppress CssUnusedSymbol -->
     <style>
+        /* corrected X (formerly Twitter) icon */
         .pi-twitter:before {
             content: "\1D54F";
             position: relative;
@@ -33,6 +34,8 @@
         </p:toolbar>
         <p:sticky target="header"/>
     </h:form>
+
+    <!-- login popup dialog -->
     <h:form>
         <p:dialog widgetVar="login" modal="true" fitViewport="true" closeOnEscape="true" showEffect="blind"
                   position="right,top" style="margin: 50px">
@@ -45,10 +48,12 @@
             </div>
         </p:dialog>
     </h:form>
+
     <div class="banner">
         <p:graphicImage alt="Logo" library="images" name="logo_white.png"/>
         <h1 class="title">ASDV Construction</h1>
     </div>
+
     <div class="info">
         <p style="left: -40px">At <span style="color: #495057; font-size: 1.1em">ASDV Construction</span>, we specialize
             in delivering high-quality construction services for residential, commercial, and industrial projects.</p>
@@ -61,6 +66,8 @@
                 style="color: #495057; font-size: 1.1em">ASDV Construction</span> is committed to making your vision
             a reality.</p>
     </div>
+
+    <!-- content places holder -->
     <div class="content">
         <div class="box1 flex">
 
@@ -72,6 +79,7 @@
 
         </div>
     </div>
+
     <footer>
         <div class="content">
             <div class="flex f1">

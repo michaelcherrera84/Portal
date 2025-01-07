@@ -171,7 +171,7 @@
                 </p:dialog>
             </p:column>
             <!-- AJAX handles the rowEdit events. The var 'i' corresponds to the datatable row being edited which
-            corresponds to the same element in the list of suppliers. -->
+            corresponds to the same element in the list of SPJs. -->
             <!--suppress ELValidationInspection -->
             <p:ajax event="rowEdit" listener="#{spjBean.update(i)}" update="messages spj_table"/>
             <p:ajax event="rowEditCancel" listener="#{spjBean.updateCancel}" update="messages spj_table"/>

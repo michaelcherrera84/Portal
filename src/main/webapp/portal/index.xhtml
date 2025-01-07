@@ -28,7 +28,10 @@
                 </p:menuButton>
             </p:toolbarGroup>
         </p:toolbar>
+
+        <!-- dashboard cards to contain links to various pages in the logged in area -->
         <div id="content">
+            <!-- This panel contains links to database management (CRUD) -->
             <p:dashboard styleClass="flex-box" model="#{portalBean.dashboardModel}" responsive="true">
                 <p:panel id="database_management" header="Database Management" closable="true">
                     <div class="card-content card1">
@@ -38,13 +41,13 @@
                         <p:commandLink value="SPJ Table" action="/portal/spj?faces-redirect=true"/>
                     </div>
                 </p:panel>
-                <p:panel id="panel2" header="Panel" closable="true" style="order: 2">
+                <p:panel id="panel2" header="Panel" closable="true">
                     <!--suppress CheckTagEmptyBody -->
-                    <div class="card-content"></div>
+                    <div class="card-content">Comming Soon!</div>
                 </p:panel>
-                <p:panel id="panel3" header="Panel" closable="true" style="order: 3">
+                <p:panel id="panel3" header="Panel" closable="true">
                     <!--suppress CheckTagEmptyBody -->
-                    <div class="card-content"></div>
+                    <div class="card-content">Comming Soon!</div>
                 </p:panel>
             </p:dashboard>
         </div>

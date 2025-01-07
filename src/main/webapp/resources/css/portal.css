@@ -10,16 +10,13 @@
 }
 
 .flex {
-    width: 30%;
-    min-width: 250px;
-    min-height: 250px;
     margin: 0 25px 15px 0;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 }
 
 .card-content {
-    min-width: 200px;
-    min-height: 200px;
+    min-width: 300px;
+    min-height: 250px;
 }
 
 .card1 {line-height: 2em;}
