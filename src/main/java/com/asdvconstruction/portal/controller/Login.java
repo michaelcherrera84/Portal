@@ -3,7 +3,7 @@ package com.asdvconstruction.portal.controller;
 import com.asdvconstruction.portal.model.User;
 import com.asdvconstruction.portal.util.Database;
 import com.asdvconstruction.portal.util.Utilities;
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * @author Michael C. Herrera
  */
 @Named(value = "login")
-@SessionScoped
+@RequestScoped
 public class Login implements Serializable {
 
     private String username;
