@@ -28,7 +28,8 @@
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>13.0.8</version>
+            <version>13.0.9</version>
+            <type>jar</type>
             <classifier>jakarta</classifier>
         </dependency>
         <dependency>

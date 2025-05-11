@@ -3,11 +3,10 @@ package com.asdvconstruction.portal.controller;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+import java.io.Serializable;
 import org.primefaces.model.dashboard.DashboardModel;
 import org.primefaces.model.dashboard.DefaultDashboardModel;
 import org.primefaces.model.dashboard.DefaultDashboardWidget;
-
-import java.io.Serializable;
 
 /**
  * @author Michael C. Herrera
